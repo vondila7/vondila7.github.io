@@ -126,7 +126,7 @@
 <meta property="og:site_name" content="kinglyq">
 <meta property="og:description" content="修改VS Code(即emmet语法)自动生成的HTML5模板 在对emmet配置文件修改前，请务必备份，以防万一。修改emmet配件文件需要关闭VSCode并重新打开方可生效。将H5模板的lang属性值修改成zh-CN/zh-cmn-Hans   找到下面的文件1&amp;#123;VSC安装路径&amp;#125;\resources\app\extensions\emmet\node_modules\vsc">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-06T12:16:14.444Z">
+<meta property="og:updated_time" content="2019-09-07T14:51:41.812Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="修改VS Code(即emmet语法)自动生成的HTML模板">
 <meta name="twitter:description" content="修改VS Code(即emmet语法)自动生成的HTML5模板 在对emmet配置文件修改前，请务必备份，以防万一。修改emmet配件文件需要关闭VSCode并重新打开方可生效。将H5模板的lang属性值修改成zh-CN/zh-cmn-Hans   找到下面的文件1&amp;#123;VSC安装路径&amp;#125;\resources\app\extensions\emmet\node_modules\vsc">
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-06 20:16:14" itemprop="dateModified" datetime="2019-08-06T20:16:14+08:00">2019-08-06</time>
+                <time title="修改时间：2019-09-07 22:51:41" itemprop="dateModified" datetime="2019-09-07T22:51:41+08:00">2019-09-07</time>
               </span>
             
           
@@ -525,13 +525,13 @@
 </li>
 </ol>
 <h2 id="修改H5模板生成时光标的初始位置"><a href="#修改H5模板生成时光标的初始位置" class="headerlink" title="修改H5模板生成时光标的初始位置"></a>修改H5模板生成时光标的初始位置</h2><ol>
-<li>默认情况下，使用！感叹号生成H5模板时，光标默认是选中device-width文本状态，需要3-4个Tab键才能将光标移入body中。<br>找到下面的文件<br>{VSC安装路径}\resources\app\extensions\emmet\node_modules\vscode-emmet-helper\out\expand\expand-full.js，使用notepad或VSC打开<br>搜索关键字device-width即可找到如下代码：<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">"meta:vp": "meta[name=viewport content='width=$&#123;1:device-width&#125;, initial-scale=$&#123;2:1.0&#125;']",</span><br><span class="line">"meta:edge": "meta:compat[content='$&#123;1:ie=edge&#125;']",</span><br></pre></td></tr></table></figure>
-
+<li><p>默认情况下，使用！感叹号生成H5模板时，光标默认是选中device-width文本状态，需要3-4个Tab键才能将光标移入body中。<br>打开xpand-full.js，搜索关键字device-width即可找到如下代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">"meta:vp": "meta[name=viewport content='width=$&#123;1:device-width&#125;, initial-scale=$&#123;2:1.0&#125;']",</span><br><span class="line">"meta:edge": "meta:compat[content='$&#123;1:ie=edge&#125;']",</span><br></pre></td></tr></table></figure>
 </li>
-</ol>
-<p>删除以上两条即可解除初始光标对device-width的文本选中状态。</p>
-<ol start="2">
-<li>VSCode下emmet生成H5模板的简单总结</li>
+<li><p>上面$大括号中的“1:”，”2:”便是锁定光标的顺序，所以只要删除1: 、2:就行了，但是这样在生成html是她的属性值就变成了${device-width}、${ie=edge}，所以干脆把$和大括号也删掉就好了。</p>
+</li>
+<li><p>VSCode下emmet生成H5模板的简单总结</p>
+</li>
 </ol>
 <blockquote>
 <p>expand-full.js文件是emmet在VSCode的全局配件文件。再提醒一次，修改之前请务必备份之，以防不测。</p>
@@ -541,11 +541,11 @@
 
 </li>
 </ul>
-<p>第1行的代码的意思大概就是使用3个!即可自动补全<!DOCTYPE html><br>第3行代码的意思是键1个!即可调第1行的补全功能及第2行的补全功能。<br>重点是第2行代码，${lang}的意思应该是寻找关于lang的变量，我估计直接将常量lang=”zh-CN”写死在此处是可行的。${charset}同理可证。<br>meta:vp将会调用4986行处的代码块，这个块里使用1:及2:依次控制着2个光标选中状态，建议清除1:和2:和包裹它们的$及对应的{}。meta:edge同埋可证。<br>title{${1:Document}}，其中title即为H5模板的页面标题，$应该是类似于变量的引用，1:还是意味着初始时光标在标题行的第1次选中Document文本状态，后者也就是模板页面的标题，完全可以修改成自己想要字符。</p>
+<p>第1行的代码的意思大概就是使用3个!即可自动补全<!DOCTYPE html><br>第3行代码的意思是键1个!即可调第1行的补全功能及第2行的补全功能。<br>重点是第2行代码，${lang}的意思应该是寻找关于lang的变量，我估计直接将常量lang=”zh-CN”写死在此处是可行的。${charset}同理可证。<br>meta:vp将会调用4986行处的代码块，这个块里使用<strong>1:及2:依次控制着2个光标选中状态</strong>，建议清除1:和2:和包裹它们的$及对应的{}。meta:edge同理可证。<br>title{${1:Document}}，其中title即为H5模板的页面标题，$应该是类似于变量的引用，1:还是意味着初始时光标在标题行的第1次选中Document文本状态，后者也就是模板页面的标题，完全可以修改成自己想要字符。</p>
 <ul>
-<li>完成修改后，H5模板初始时，光标是<body><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>之间，减少了不必要的干扰，lang的属性值是zh-CN，减少了某些浏览器集成语言检测的干扰，还可以将缺省的标题修改成自己的个性文字。</li>
+<li>完成修改后，H5模板初始时，光标是<body><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false}});</script></body>之间，减少了不必要的干扰，lang的属性值是zh-cmn-Hans，减少了某些浏览器集成语言检测的干扰，还可以将缺省的标题修改成自己的个性文字。</li>
 </ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-cmn-Hans"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    |</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line">charset="UTF-8"的修改应该是在&#123;VSCode安装路径&#125;\resources\app\extensions\html\snippets\html.snippets.json文件中进行。</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-cmn-Hans"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"ie=edge,chrome=1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line">charset="UTF-8"的修改应该是在&#123;VSCode安装路径&#125;\resources\app\extensions\html\snippets\html.snippets.json文件中进行。</span><br></pre></td></tr></table></figure>
       
     </div>
 
