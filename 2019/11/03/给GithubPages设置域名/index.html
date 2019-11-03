@@ -128,7 +128,9 @@
 <meta property="og:image" content="http://yoursite.com/2019/11/03/给GithubPages设置域名/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/11/03/给GithubPages设置域名/2.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/11/03/给GithubPages设置域名/3.jpg">
-<meta property="og:updated_time" content="2019-11-03T10:38:07.639Z">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/给GithubPages设置域名/4.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/给GithubPages设置域名/5.jpg">
+<meta property="og:updated_time" content="2019-11-03T10:54:00.777Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="给github pages设置域名">
 <meta name="twitter:description" content="一直使用xxx.github.io总感觉不太合适，域名长且没有个性，所以我们就要为她设置一个独立的域名，首先：我们得先注册一个域名，在哪里注册都无所谓了，其次：">
@@ -440,7 +442,7 @@
                 
               
 
-              <time title="创建时间：2019-11-03 18:13:34 / 修改时间：18:38:07" itemprop="dateCreated datePublished" datetime="2019-11-03T18:13:34+08:00">2019-11-03</time>
+              <time title="创建时间：2019-11-03 18:13:34 / 修改时间：18:54:00" itemprop="dateCreated datePublished" datetime="2019-11-03T18:13:34+08:00">2019-11-03</time>
             </span>
           
 
@@ -514,8 +516,14 @@
 <li><p>解析两次，主机记录分别填 WWW 和 @<br><img src="2.jpg" alt="主机记录"></p>
 </li>
 </ol>
-<h1 id="（二）Github-Pages的设置"><a href="#（二）Github-Pages的设置" class="headerlink" title="（二）Github Pages的设置"></a>（二）Github Pages的设置</h1><ol>
-<li>进入你的仓库，在设置中找到 Custom domain,将你注册的域名填进去，然后，OK<br><img src="3.jpg" alt="域名解析"></li>
+<h1 id="（二）添加CNAME文件"><a href="#（二）添加CNAME文件" class="headerlink" title="（二）添加CNAME文件"></a>（二）添加CNAME文件</h1><ol>
+<li><p>如果使用了Hexo的话，就在source目录下创建一个名为<strong>CNAME</strong>的文件（没有后缀），在里面填上注册好的域名（不带www）， 然后重新生成部署一下。<br><img src="3.jpg" alt="CNAME2"></p>
+</li>
+<li><p>如果使用了其他的博客框架也是同理，因为让CNAME文件存在在你生成好的项目根目录就行了。就像这样：<br><img src="4.jpg" alt="CNAME2"></p>
+</li>
+</ol>
+<h1 id="（三）Github-Pages的设置"><a href="#（三）Github-Pages的设置" class="headerlink" title="（三）Github Pages的设置"></a>（三）Github Pages的设置</h1><ol>
+<li>进入你的仓库，在设置中找到 Custom domain,将你注册的域名（不带www）填进去，然后，OK<br><img src="5.jpg" alt="域名解析"></li>
 </ol>
 
       
@@ -801,7 +809,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#（一）添加域名解析"><span class="nav-number">1.</span> <span class="nav-text">（一）添加域名解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#（二）Github-Pages的设置"><span class="nav-number">2.</span> <span class="nav-text">（二）Github Pages的设置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#（一）添加域名解析"><span class="nav-number">1.</span> <span class="nav-text">（一）添加域名解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#（二）添加CNAME文件"><span class="nav-number">2.</span> <span class="nav-text">（二）添加CNAME文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#（三）Github-Pages的设置"><span class="nav-number">3.</span> <span class="nav-text">（三）Github Pages的设置</span></a></li></ol></div>
             
 
           </div>
