@@ -126,7 +126,7 @@
 <meta property="og:site_name" content="kinglyq">
 <meta property="og:description" content="修改VS Code(即emmet语法)自动生成的HTML5模板 在对emmet配置文件修改前，请务必备份，以防万一。修改emmet配件文件需要关闭VSCode并重新打开方可生效。将H5模板的lang属性值修改成zh-CN/zh-cmn-Hans   找到下面的文件1&amp;#123;VSC安装路径&amp;#125;\resources\app\extensions\emmet\node_modules\vsc">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-09-07T14:51:41.812Z">
+<meta property="og:updated_time" content="2019-11-03T10:11:46.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="修改VS Code(即emmet语法)自动生成的HTML模板">
 <meta name="twitter:description" content="修改VS Code(即emmet语法)自动生成的HTML5模板 在对emmet配置文件修改前，请务必备份，以防万一。修改emmet配件文件需要关闭VSCode并重新打开方可生效。将H5模板的lang属性值修改成zh-CN/zh-cmn-Hans   找到下面的文件1&amp;#123;VSC安装路径&amp;#125;\resources\app\extensions\emmet\node_modules\vsc">
@@ -452,7 +452,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-09-07 22:51:41" itemprop="dateModified" datetime="2019-09-07T22:51:41+08:00">2019-09-07</time>
+                <time title="修改时间：2019-11-03 18:11:46" itemprop="dateModified" datetime="2019-11-03T18:11:46+08:00">2019-11-03</time>
               </span>
             
           
@@ -528,7 +528,7 @@
 <li><p>默认情况下，使用！感叹号生成H5模板时，光标默认是选中device-width文本状态，需要3-4个Tab键才能将光标移入body中。<br>打开xpand-full.js，搜索关键字device-width即可找到如下代码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">"meta:vp": "meta[name=viewport content='width=$&#123;1:device-width&#125;, initial-scale=$&#123;2:1.0&#125;']",</span><br><span class="line">"meta:edge": "meta:compat[content='$&#123;1:ie=edge&#125;']",</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>上面$大括号中的“1:”，”2:”便是锁定光标的顺序，所以只要删除1: 、2:就行了，但是这样在生成html是她的属性值就变成了${device-width}、${ie=edge}，所以干脆把$和大括号也删掉就好了。</p>
+<li><p>上面$大括号中的<code>1:</code>， <code>2:</code>便是锁定光标的顺序，所以只要删除1: ,2:就行了，但是这样在生成html是她的属性值就变成了${device-width}、${ie=edge}，所以干脆把$和大括号也删掉就好了。</p>
 </li>
 <li><p>VSCode下emmet生成H5模板的简单总结</p>
 </li>
@@ -731,7 +731,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
