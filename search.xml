@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>A New Beginning</title>
+    <url>/2021/02/21/A-new-beginning/</url>
+    <content><![CDATA[<p>A New Beginning</p>
+]]></content>
+  </entry>
+  <entry>
     <title>Create React App 项目部署到二级目录</title>
     <url>/2022/04/23/Create%20React%20App%20%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%88%B0%E4%BA%8C%E7%BA%A7%E7%9B%AE%E5%BD%95/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>A New Beginning</title>
-    <url>/2021/02/21/A-new-beginning/</url>
-    <content><![CDATA[<p>A New Beginning</p>
+    <title>Git 删除提交记录</title>
+    <url>/2022/04/30/Git%20%E5%88%A0%E9%99%A4%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<ol>
+<li>使用 git log 查找到要删除提交记录的上一条提交的 commit 的 id</li>
+</ol>
+<span id="more"></span>
+
+<ol start="2">
+<li><p>执行 git rebase -i commit-id</p>
+</li>
+<li><p>vim普通模式下，光标移到要删的那一行，执行 dd，删除所在行（按 i 进入编辑模式，把需要删除的记录的 pick 改为 drop，然后按 esc 退出 :wq 保存</p>
+</li>
+<li><p>再次查看git log，可以看到记录已经没有了</p>
+</li>
+</ol>
 ]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
   </entry>
   <entry>
     <title>Apache Shiro 默认拦截器</title>
@@ -83,6 +104,86 @@
       </tags>
   </entry>
   <entry>
+    <title>Fetch 无法获取响应头</title>
+    <url>/2021/09/23/Fetch%20%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E5%A4%B4/</url>
+    <content><![CDATA[<p>请求响应后，打印 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response/headers"><code>Response.headers</code></a> 却输出了空对象。</p>
+<span id="more"></span>
+
+<p>经过笔者数分钟的探索，发现产生这种情况，应该是请求处于<strong>跨域</strong>之中，于此则要在 <code>fetch()</code> 中配置 <code>mode</code> 属性：</p>
+<p>mode: 请求的模式，如 cors、 no-cors 或者 same-origin。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span><span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'cors'</span><span class="token punctuation">,</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>至于 <code>Response.headers</code> 中的请求头信息不全，则要在服务端配置 <code>Access-Control-Expose-Headers</code>。</p>
+<blockquote><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些首部可以作为响应的一部分暴露给外部。</p>
+<p>默认情况下，只有七种 simple response headers （简单响应首部）可以暴露给外部：</p>
+<ul>
+<li>Cache-Control</li>
+<li>Content-Language</li>
+<li>Content-Length</li>
+<li>Content-Type</li>
+<li>Expires</li>
+<li>Last-Modified</li>
+<li>Pragma</li>
+</ul>
+<p>如果想要让客户端可以访问到其他的首部信息，可以将它们在 <code>Access-Control-Expose-Headers</code> 里面列出来。</p>
+<footer><strong>@MDN</strong><cite><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">Access-Control-Expose-Headers - HTTP | MDN</a></cite></footer></blockquote>
+
+]]></content>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 撤销上次的提交</title>
+    <url>/2022/04/30/Git%20%E6%92%A4%E9%94%80%E4%B8%8A%E6%AC%A1%E7%9A%84%E6%8F%90%E4%BA%A4/</url>
+    <content><![CDATA[<p>这条命令就能撤回刚刚的提交。</p>
+<pre class="line-numbers language-none"><code class="language-none">git reset HEAD^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更多的参数：</p>
+<span id="more"></span>
+<pre class="line-numbers language-none"><code class="language-none">git reset [--soft | --mixed | --hard] [-q] [&lt;commit&gt;]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>--mixed</code><br>不删除工作空间改动代码，撤销 commit，并且撤销git add . 操作<br>这个为默认参数，<code>git reset --mixed HEAD^</code> 和 <code>git reset HEAD^</code> 效果是一样的。</p>
+<p><code>--soft</code><br>不删除工作空间改动代码，撤销 commit，不撤销 git add .</p>
+<p><code>--hard</code><br>删除工作空间改动代码，撤销 commit，撤销 git add .</p>
+<div class="note warning"><p>注意！完成这个操作后，会删除工作空间代码！恢复到上一次的 commit 状态，慎重使用！</p>
+</div>
+
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Git 重命名远端分支</title>
+    <url>/2023/12/23/Git-%E9%87%8D%E5%91%BD%E5%90%8D%E8%BF%9C%E7%AB%AF%E5%88%86%E6%94%AF/</url>
+    <content><![CDATA[<p>要修改 Git 远程仓库中的分支名称，可以按以下步骤操作：</p>
+<span id="more"></span>
+
+<ol>
+<li>如果不在要重命名的分支上，那先切换到该分支</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git checkout &lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>重命名本地分支，使用以下命令将本地分支重命名</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git branch -m &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>删除远程仓库中的旧分支（注意冒号）</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin :&lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="4">
+<li>最后将重命名后的本地分支推送到远端</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
     <title>Hexo 文章重命名后的路径访问问题</title>
     <url>/2021/03/25/Hexo%20%E6%96%87%E7%AB%A0%E9%87%8D%E5%91%BD%E5%90%8D%E5%90%8E%E7%9A%84%E8%B7%AF%E5%BE%84%E8%AE%BF%E9%97%AE%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>修改了文章文件名的大小写后，发现其部署到 <code>GitHub</code> 后并没有变化。。。</p>
@@ -123,81 +224,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Fetch 无法获取响应头</title>
-    <url>/2021/09/23/Fetch%20%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96%E5%93%8D%E5%BA%94%E5%A4%B4/</url>
-    <content><![CDATA[<p>请求响应后，打印 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response/headers"><code>Response.headers</code></a> 却输出了空对象。</p>
-<span id="more"></span>
-
-<p>经过笔者数分钟的探索，发现产生这种情况，应该是请求处于<strong>跨域</strong>之中，于此则要在 <code>fetch()</code> 中配置 <code>mode</code> 属性：</p>
-<p>mode: 请求的模式，如 cors、 no-cors 或者 same-origin。</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span><span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'cors'</span><span class="token punctuation">,</span>
-    <span class="token operator">...</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>至于 <code>Response.headers</code> 中的请求头信息不全，则要在服务端配置 <code>Access-Control-Expose-Headers</code>。</p>
-<blockquote><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些首部可以作为响应的一部分暴露给外部。</p>
-<p>默认情况下，只有七种 simple response headers （简单响应首部）可以暴露给外部：</p>
-<ul>
-<li>Cache-Control</li>
-<li>Content-Language</li>
-<li>Content-Length</li>
-<li>Content-Type</li>
-<li>Expires</li>
-<li>Last-Modified</li>
-<li>Pragma</li>
-</ul>
-<p>如果想要让客户端可以访问到其他的首部信息，可以将它们在 <code>Access-Control-Expose-Headers</code> 里面列出来。</p>
-<footer><strong>@MDN</strong><cite><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">Access-Control-Expose-Headers - HTTP | MDN</a></cite></footer></blockquote>
-
-]]></content>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git 删除提交记录</title>
-    <url>/2022/04/30/Git%20%E5%88%A0%E9%99%A4%E6%8F%90%E4%BA%A4%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<ol>
-<li>使用 git log 查找到要删除提交记录的上一条提交的 commit 的 id</li>
-</ol>
-<span id="more"></span>
-
-<ol start="2">
-<li><p>执行 git rebase -i commit-id</p>
-</li>
-<li><p>vim普通模式下，光标移到要删的那一行，执行 dd，删除所在行（按 i 进入编辑模式，把需要删除的记录的 pick 改为 drop，然后按 esc 退出 :wq 保存</p>
-</li>
-<li><p>再次查看git log，可以看到记录已经没有了</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Git 撤销上次的提交</title>
-    <url>/2022/04/30/Git%20%E6%92%A4%E9%94%80%E4%B8%8A%E6%AC%A1%E7%9A%84%E6%8F%90%E4%BA%A4/</url>
-    <content><![CDATA[<p>这条命令就能撤回刚刚的提交。</p>
-<pre class="line-numbers language-none"><code class="language-none">git reset HEAD^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>更多的参数：</p>
-<span id="more"></span>
-<pre class="line-numbers language-none"><code class="language-none">git reset [--soft | --mixed | --hard] [-q] [&lt;commit&gt;]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><code>--mixed</code><br>不删除工作空间改动代码，撤销 commit，并且撤销git add . 操作<br>这个为默认参数，<code>git reset --mixed HEAD^</code> 和 <code>git reset HEAD^</code> 效果是一样的。</p>
-<p><code>--soft</code><br>不删除工作空间改动代码，撤销 commit，不撤销 git add .</p>
-<p><code>--hard</code><br>删除工作空间改动代码，撤销 commit，撤销 git add .</p>
-<div class="note warning"><p>注意！完成这个操作后，会删除工作空间代码！恢复到上一次的 commit 状态，慎重使用！</p>
-</div>
-
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-  </entry>
-  <entry>
     <title>IntelliJ IDEA 的个人配置</title>
     <url>/2021/03/17/IntelliJ%20IDEA%20%E7%9A%84%E4%B8%AA%E4%BA%BA%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<blockquote><p>功能强大，符合人体工程学的 JVM IDE</p>
@@ -215,7 +241,7 @@
 <img src="/2021/03/17/IntelliJ%20IDEA%20%E7%9A%84%E4%B8%AA%E4%BA%BA%E9%85%8D%E7%BD%AE/star-mark.jpg" class="" title="星号标记">
 
 <h2 id="代码注释模板"><a href="#代码注释模板" class="headerlink" title="代码注释模板"></a>代码注释模板</h2><pre class="line-numbers language-none"><code class="language-none">&#x2F;**
- * @author &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;github.com&#x2F;kinglyq&quot; target&#x3D;&quot;_blank&quot;&gt;kinglyq&lt;a&#x2F;&gt;
+ * @author &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;github.com&#x2F;vondila7&quot; target&#x3D;&quot;_blank&quot;&gt;Vondila&lt;a&#x2F;&gt;
  *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="使用-Prettier"><a href="#使用-Prettier" class="headerlink" title="使用 Prettier"></a>使用 Prettier</h2><ol>
@@ -254,97 +280,6 @@
       <tags>
         <tag>IntelliJ IDEA</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Git 重命名远端分支</title>
-    <url>/2023/12/23/Git-%E9%87%8D%E5%91%BD%E5%90%8D%E8%BF%9C%E7%AB%AF%E5%88%86%E6%94%AF/</url>
-    <content><![CDATA[<p>要修改 Git 远程仓库中的分支名称，可以按以下步骤操作：</p>
-<span id="more"></span>
-
-<ol>
-<li>如果不在要重命名的分支上，那先切换到该分支</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git checkout &lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="2">
-<li>重命名本地分支，使用以下命令将本地分支重命名</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git branch -m &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="3">
-<li>删除远程仓库中的旧分支（注意冒号）</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git push origin :&lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="4">
-<li>最后将重命名后的本地分支推送到远端</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">git push origin &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>JavaFX Runtime images (Java 11+)</title>
-    <url>/2021/03/09/JavaFX-runtime-images/</url>
-    <content><![CDATA[<p>JavaFX 项目的 <code>Runtime images</code> 是一个自定义 JRE，它仅包含应用程序所需的平台模块。</p>
-<p>本文仅针对通过 <code>Maven</code> 构建的项目.</p>
-<span id="more"></span>
-
-<h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>构建的成功与否几乎都取决于 <code>pom.xml</code> 中关于插件的配置，下面会针对这部分进行阐述。</p>
-<p><code>javafx-maven-plugin</code>有两个主要的命令 —— <code>javafx:run</code> 和 <code>javafx:jlink</code></p>
-<ul>
-<li><code>javafx:run</code> 进行编译和运行</li>
-<li><code>javafx:jlink</code> 创建自定义运行时</li>
-</ul>
-<h1 id="javafx-run-options"><a href="#javafx-run-options" class="headerlink" title="javafx:run options"></a>javafx:run options</h1><p>可能是原始的情况：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>release</span><span class="token punctuation">></span></span>11 or 12 13 14 15 ......<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>release</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>参考 <a href="https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options">GitHub - openjfx&#x2F;javafx-maven-plugin: Maven plugin to run JavaFX 11+ applications</a> 来进行配置</p>
-<p>例如：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>stripDebug</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>stripDebug</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>compress</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>compress</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noHeaderFiles</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noHeaderFiles</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noManPages</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noManPages</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>launcher</span><span class="token punctuation">></span></span>launcher<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>launcher</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkImageName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkImageName</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkZipName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkZipName</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="运行-javafx-run-的失败情况和解决办法"><a href="#运行-javafx-run-的失败情况和解决办法" class="headerlink" title="运行 javafx:run 的失败情况和解决办法"></a>运行 <code>javafx:run</code> 的失败情况和解决办法</h1><ul>
-<li><p><code>Failed to execute goal org.openjfx:javafx-maven-plugin:0.0.3:run (default-cli) on project hellofx: Error</code></p>
-<p><code>JAVA_HOME</code> 与项目需要的版本不一致，为了避免这种情况，可以将正确的版本添加到 <code>javafx-maven-plugin</code>:</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>xxx\jdk-xxx\bin\java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaFX</category>
-      </categories>
   </entry>
   <entry>
     <title>Java JSON library - Jackson 的使用</title>
@@ -443,6 +378,71 @@
       </tags>
   </entry>
   <entry>
+    <title>JavaFX Runtime images (Java 11+)</title>
+    <url>/2021/03/09/JavaFX-runtime-images/</url>
+    <content><![CDATA[<p>JavaFX 项目的 <code>Runtime images</code> 是一个自定义 JRE，它仅包含应用程序所需的平台模块。</p>
+<p>本文仅针对通过 <code>Maven</code> 构建的项目.</p>
+<span id="more"></span>
+
+<h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>构建的成功与否几乎都取决于 <code>pom.xml</code> 中关于插件的配置，下面会针对这部分进行阐述。</p>
+<p><code>javafx-maven-plugin</code>有两个主要的命令 —— <code>javafx:run</code> 和 <code>javafx:jlink</code></p>
+<ul>
+<li><code>javafx:run</code> 进行编译和运行</li>
+<li><code>javafx:jlink</code> 创建自定义运行时</li>
+</ul>
+<h1 id="javafx-run-options"><a href="#javafx-run-options" class="headerlink" title="javafx:run options"></a>javafx:run options</h1><p>可能是原始的情况：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>release</span><span class="token punctuation">></span></span>11 or 12 13 14 15 ......<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>release</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>参考 <a href="https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options">GitHub - openjfx&#x2F;javafx-maven-plugin: Maven plugin to run JavaFX 11+ applications</a> 来进行配置</p>
+<p>例如：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>stripDebug</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>stripDebug</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>compress</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>compress</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noHeaderFiles</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noHeaderFiles</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noManPages</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noManPages</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>launcher</span><span class="token punctuation">></span></span>launcher<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>launcher</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkImageName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkImageName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkZipName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkZipName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="运行-javafx-run-的失败情况和解决办法"><a href="#运行-javafx-run-的失败情况和解决办法" class="headerlink" title="运行 javafx:run 的失败情况和解决办法"></a>运行 <code>javafx:run</code> 的失败情况和解决办法</h1><ul>
+<li><p><code>Failed to execute goal org.openjfx:javafx-maven-plugin:0.0.3:run (default-cli) on project hellofx: Error</code></p>
+<p><code>JAVA_HOME</code> 与项目需要的版本不一致，为了避免这种情况，可以将正确的版本添加到 <code>javafx-maven-plugin</code>:</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>xxx\jdk-xxx\bin\java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaFX</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Linux 下编译安装 Redis</title>
     <url>/2023/05/14/Linux-%E4%B8%8B%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85-Redis/</url>
     <content><![CDATA[<p>首先进入官网 <a href="https://redis.io/download/">Download | Redis</a> 下载安装包。</p>
@@ -497,15 +497,15 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl <span class="token builtin class-name">enable</span> redis.service <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
+    <title>JavaScript 中的节流与防抖</title>
+    <url>/2021/12/27/JavaScript%20%E4%B8%AD%E7%9A%84%E8%8A%82%E6%B5%81%E4%B8%8E%E9%98%B2%E6%8A%96/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Maven 历史版本下载</title>
     <url>/2022/04/12/Maven%20%E5%8E%86%E5%8F%B2%E7%89%88%E6%9C%AC%E4%B8%8B%E8%BD%BD/</url>
     <content><![CDATA[<p><a href="https://archive.apache.org/dist/maven/maven-3/">https://archive.apache.org/dist/maven/maven-3/</a></p>
 <span id="more"></span>]]></content>
-  </entry>
-  <entry>
-    <title>JavaScript 中的节流与防抖</title>
-    <url>/2021/12/27/JavaScript%20%E4%B8%AD%E7%9A%84%E8%8A%82%E6%B5%81%E4%B8%8E%E9%98%B2%E6%8A%96/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>MyBatis 的参数传递</title>
@@ -580,6 +580,83 @@ WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows
       <tags>
         <tag>MyBatis</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Node.js 包管理器配置包缓存位置</title>
+    <url>/2023/02/05/Node-js-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E9%85%8D%E7%BD%AE%E5%8C%85%E7%BC%93%E5%AD%98%E4%BD%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h1><h2 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h2><ul>
+<li><code>npm config ls or npm config list</code> 所有配置。</li>
+<li><code>npm config list -l</code> 获取某配置。</li>
+<li><code>npm config get xxx</code></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="配置全局安装和缓存路径"><a href="#配置全局安装和缓存路径" class="headerlink" title="配置全局安装和缓存路径"></a>配置全局安装和缓存路径</h2><ul>
+<li><code>npm config set prefix xxxpath</code></li>
+<li><code>npm config set cache xxxpath</code></li>
+</ul>
+<blockquote>
+<p>Windows 下要将全局路径添加到环境变量 PATH 中，方可使用依赖的独有命令。</p>
+</blockquote>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看全局包：<code>npm list -g --depth 0</code></p>
+<p>卸载包：<code>npm uninstall</code></p>
+<h1 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h1><p>使用 <code>yarn config list</code> 查看所有已配置的信息。</p>
+<p>设置 <code>cache-folder</code> 来配置缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set cache-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者 通过环境变量 <code>YARN_CACHE_FOLDER</code> 指定缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">YARN_CACHE_FOLDER&#x3D;&lt;path&gt; yarn &lt;command&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>运行 <code>yarn cache dir</code> 会打印出当前的 yarn 全局缓存在哪里。</p>
+<h2 id="改变-yarn-全局安装路径"><a href="#改变-yarn-全局安装路径" class="headerlink" title="改变 yarn 全局安装路径"></a>改变 yarn 全局安装路径</h2><p>设置安装位置</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set global-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>yarn global bin</code> 将输出 <code>Yarn</code> 为您已安装的可执行文件之符号链接准备的位置。 您可以使用 <code>yarn config set prefix &lt;filepath&gt;</code> 配置此基本位置。</p>
+<p><code>yarn global dir</code> 将打印存放全局node_modules的全局安装文件夹。</p>
+<p>例如：以设置 <code>D:\Yarn\Global</code> 为全局安装目录为例，则：</p>
+<ul>
+<li><code>yarn config set global-folder D:\Yarn\Global</code></li>
+<li><code>yarn config set prefix  D:\Yarn\Global</code></li>
+</ul>
+<blockquote>
+<p>全局安装依赖时会将其命令脚本放到 D:\Yarn\Global\bin下，所以要将D:\Yarn\Global\bin 配置到环境变量 PATH 中。</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>MySQL 字符集</title>
+    <url>/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/</url>
+    <content><![CDATA[<p>utf-8 编码可能 2 个字节、3 个字节、4 个字节的字符，但是 MySQL 的 utf8 编码只支持 3 字节的数据，而 utf8mb4 编码是 utf8 编码的超集，兼容 utf8，并且能存储 4 字节的表情字符。</p>
+<span id="more"></span>
+
+<h1 id="使用-uft8mb4"><a href="#使用-uft8mb4" class="headerlink" title="使用 uft8mb4"></a>使用 uft8mb4</h1><p>查看当前字符集：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SHOW VARIABLES WHERE Variable_name LIKE <span class="token string">'character_set_%'</span> OR Variable_name LIKE <span class="token string">'collation%'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<div style="width: 32rem;">
+<img src="/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/mysql_default_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<p>修改配置文件，一般名称为 <code>my.ini</code>，加入以下配置：</p>
+<pre class="line-numbers language-none"><code class="language-none">[client]
+default-character-set &#x3D; utf8mb4
+
+[mysql]
+default-character-set &#x3D; utf8mb4
+
+[mysqld]
+character-set-client-handshake &#x3D; FALSE
+character-set-server &#x3D; utf8mb4
+# ci 是 case insensitive, 即 &quot;大小写不敏感&quot;
+collation-server &#x3D; utf8mb4_general_ci
+init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改后重启 MySQL 服务，这时再查看发现默认字符集已经改变了。</p>
+<div style="width: 32rem;">
+<img src="/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/mysql_utf8mb4_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<h1 id="建表语句"><a href="#建表语句" class="headerlink" title="建表语句"></a>建表语句</h1><pre class="line-numbers language-none"><code class="language-none">CREATE DATABASE IF NOT EXISTS test DEFAULT CHARSET utf8mb4 COLLATE utf8_general_ci;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
   </entry>
   <entry>
     <title>MySQL 8.x 绿色版安装教程</title>
@@ -660,83 +737,6 @@ default-character-set&#x3D;utf8mb4<span aria-hidden="true" class="line-numbers-r
 set global validate_password.length&#x3D;5;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>此时，MySQL 安装完成。 👏</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Node.js 包管理器配置包缓存位置</title>
-    <url>/2023/02/05/Node-js-%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E9%85%8D%E7%BD%AE%E5%8C%85%E7%BC%93%E5%AD%98%E4%BD%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h1 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h1><h2 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h2><ul>
-<li><code>npm config ls or npm config list</code> 所有配置。</li>
-<li><code>npm config list -l</code> 获取某配置。</li>
-<li><code>npm config get xxx</code></li>
-</ul>
-<span id="more"></span>
-
-<h2 id="配置全局安装和缓存路径"><a href="#配置全局安装和缓存路径" class="headerlink" title="配置全局安装和缓存路径"></a>配置全局安装和缓存路径</h2><ul>
-<li><code>npm config set prefix xxxpath</code></li>
-<li><code>npm config set cache xxxpath</code></li>
-</ul>
-<blockquote>
-<p>Windows 下要将全局路径添加到环境变量 PATH 中，方可使用依赖的独有命令。</p>
-</blockquote>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看全局包：<code>npm list -g --depth 0</code></p>
-<p>卸载包：<code>npm uninstall</code></p>
-<h1 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h1><p>使用 <code>yarn config list</code> 查看所有已配置的信息。</p>
-<p>设置 <code>cache-folder</code> 来配置缓存目录。</p>
-<pre class="line-numbers language-none"><code class="language-none">yarn config set cache-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>或者 通过环境变量 <code>YARN_CACHE_FOLDER</code> 指定缓存目录。</p>
-<pre class="line-numbers language-none"><code class="language-none">YARN_CACHE_FOLDER&#x3D;&lt;path&gt; yarn &lt;command&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>运行 <code>yarn cache dir</code> 会打印出当前的 yarn 全局缓存在哪里。</p>
-<h2 id="改变-yarn-全局安装路径"><a href="#改变-yarn-全局安装路径" class="headerlink" title="改变 yarn 全局安装路径"></a>改变 yarn 全局安装路径</h2><p>设置安装位置</p>
-<pre class="line-numbers language-none"><code class="language-none">yarn config set global-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><code>yarn global bin</code> 将输出 <code>Yarn</code> 为您已安装的可执行文件之符号链接准备的位置。 您可以使用 <code>yarn config set prefix &lt;filepath&gt;</code> 配置此基本位置。</p>
-<p><code>yarn global dir</code> 将打印存放全局node_modules的全局安装文件夹。</p>
-<p>例如：以设置 <code>D:\Yarn\Global</code> 为全局安装目录为例，则：</p>
-<ul>
-<li><code>yarn config set global-folder D:\Yarn\Global</code></li>
-<li><code>yarn config set prefix  D:\Yarn\Global</code></li>
-</ul>
-<blockquote>
-<p>全局安装依赖时会将其命令脚本放到 D:\Yarn\Global\bin下，所以要将D:\Yarn\Global\bin 配置到环境变量 PATH 中。</p>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title>MySQL 字符集</title>
-    <url>/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/</url>
-    <content><![CDATA[<p>utf-8 编码可能 2 个字节、3 个字节、4 个字节的字符，但是 MySQL 的 utf8 编码只支持 3 字节的数据，而 utf8mb4 编码是 utf8 编码的超集，兼容 utf8，并且能存储 4 字节的表情字符。</p>
-<span id="more"></span>
-
-<h1 id="使用-uft8mb4"><a href="#使用-uft8mb4" class="headerlink" title="使用 uft8mb4"></a>使用 uft8mb4</h1><p>查看当前字符集：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SHOW VARIABLES WHERE Variable_name LIKE <span class="token string">'character_set_%'</span> OR Variable_name LIKE <span class="token string">'collation%'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<div style="width: 32rem;">
-<img src="/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/mysql_default_charset.png" class="" title="MySQL 默认字符集">
-</div>
-
-<p>修改配置文件，一般名称为 <code>my.ini</code>，加入以下配置：</p>
-<pre class="line-numbers language-none"><code class="language-none">[client]
-default-character-set &#x3D; utf8mb4
-
-[mysql]
-default-character-set &#x3D; utf8mb4
-
-[mysqld]
-character-set-client-handshake &#x3D; FALSE
-character-set-server &#x3D; utf8mb4
-# ci 是 case insensitive, 即 &quot;大小写不敏感&quot;
-collation-server &#x3D; utf8mb4_general_ci
-init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>修改后重启 MySQL 服务，这时再查看发现默认字符集已经改变了。</p>
-<div style="width: 32rem;">
-<img src="/2022/11/05/MySQL%20%E5%AD%97%E7%AC%A6%E9%9B%86/mysql_utf8mb4_charset.png" class="" title="MySQL 默认字符集">
-</div>
-
-<h1 id="建表语句"><a href="#建表语句" class="headerlink" title="建表语句"></a>建表语句</h1><pre class="line-numbers language-none"><code class="language-none">CREATE DATABASE IF NOT EXISTS test DEFAULT CHARSET utf8mb4 COLLATE utf8_general_ci;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -839,35 +839,18 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
 <pre class="line-numbers language-none"><code class="language-none">purge recyclebin;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
-    <title>Shiro 自定义 Realm 却只能捕获 AuthenticationException</title>
-    <url>/2022/03/31/Shiro%20%E8%87%AA%E5%AE%9A%E4%B9%89%20Realm%20%E5%8D%B4%E5%8F%AA%E8%83%BD%E6%8D%95%E8%8E%B7%20AuthenticationException/</url>
-    <content><![CDATA[<p>产生这个问题的原因可能有多种，</p>
+    <title>VS Code 导入 Java 项目却一直 Starting Java Language Server...</title>
+    <url>/2021/08/01/VS%20Code%20%E5%AF%BC%E5%85%A5%20Java%20%E9%A1%B9%E7%9B%AE%E5%8D%B4%E4%B8%80%E7%9B%B4%20Starting%20Java%20Language%20Server/</url>
+    <content><![CDATA[<p>关于 Java 环境一直处于加载中 👇</p>
 <span id="more"></span>
 
-<p>现在笔者只遇到了一种，那就是——项目存在一个以上的 <code>Realm</code>，例如除了自定义 <code>Realm</code> 外， <code>resources</code> 目录下有个 <code>shiro.ini</code> 文件，Shiro 读取到到后自动产生了 <code>IniRealm</code>。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>VSCode 在代码片段中没有提示</title>
-    <url>/2021/05/31/VSCode%20%E5%9C%A8%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</url>
-    <content><![CDATA[<p>默认情况下，在代码片段中（处于光标聚焦状态）是没有提示的。比如:</p>
-<span id="more"></span>
-
-<div style="width:90%;">
-<video width='100%' src="no.mp4" controls></video>
-</div>
-
-<p>要想在这种情况下有代码提示的话，就得将 <code>Snippets Prevent Quick Suggestions</code> 关闭，如下：</p>
-<div style="width:90%;">
-<img src="/2021/05/31/VSCode%20%E5%9C%A8%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/suggestions.jpg" class="" title="Prevent-Quick-Suggestions">
-</div>
-
-<p>这样的话，在使用的代码片段时，也会有提示。</p>
-<div style="width:90%;">
-<video width='100%' src="yes.mp4" controls></video>
-</div>
+<p>进入 %APPDATA%\Code\User 目录，删除 <strong>workspaceStorage</strong> 文件夹</p>
+<blockquote>
+<p><a href="https://github.com/redhat-developer/vscode-java/issues/158">Starting Java Language Server never ends · Issue #158 · redhat-developer&#x2F;vscode-java</a></p>
+</blockquote>
 ]]></content>
       <tags>
+        <tag>Java</tag>
         <tag>Visual Studio Code</tag>
       </tags>
   </entry>
@@ -919,26 +902,13 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
       </tags>
   </entry>
   <entry>
-    <title>为什么不能修改 Twitter 的显示名称</title>
-    <url>/2024/04/06/why-can-t-you-modify-the-display-name-on-twitter/</url>
-    <content><![CDATA[<blockquote><p><strong>Note:</strong> When you are initially going through your profile set-up, you will not see the option to change your display name, until you have a profile and header photo uploaded. </p>
-<footer><strong>@Twitter</strong><cite><a href="https://help.twitter.com/en/managing-your-account/how-to-customize-your-profile">help.twitter.com/en/managing-your-account/how-to-customize-your-profile</a></cite></footer></blockquote>]]></content>
-  </entry>
-  <entry>
-    <title>VS Code 导入 Java 项目却一直 Starting Java Language Server...</title>
-    <url>/2021/08/01/VS%20Code%20%E5%AF%BC%E5%85%A5%20Java%20%E9%A1%B9%E7%9B%AE%E5%8D%B4%E4%B8%80%E7%9B%B4%20Starting%20Java%20Language%20Server/</url>
-    <content><![CDATA[<p>关于 Java 环境一直处于加载中 👇</p>
+    <title>Shiro 自定义 Realm 却只能捕获 AuthenticationException</title>
+    <url>/2022/03/31/Shiro%20%E8%87%AA%E5%AE%9A%E4%B9%89%20Realm%20%E5%8D%B4%E5%8F%AA%E8%83%BD%E6%8D%95%E8%8E%B7%20AuthenticationException/</url>
+    <content><![CDATA[<p>产生这个问题的原因可能有多种，</p>
 <span id="more"></span>
 
-<p>进入 %APPDATA%\Code\User 目录，删除 <strong>workspaceStorage</strong> 文件夹</p>
-<blockquote>
-<p><a href="https://github.com/redhat-developer/vscode-java/issues/158">Starting Java Language Server never ends · Issue #158 · redhat-developer&#x2F;vscode-java</a></p>
-</blockquote>
+<p>现在笔者只遇到了一种，那就是——项目存在一个以上的 <code>Realm</code>，例如除了自定义 <code>Realm</code> 外， <code>resources</code> 目录下有个 <code>shiro.ini</code> 文件，Shiro 读取到到后自动产生了 <code>IniRealm</code>。</p>
 ]]></content>
-      <tags>
-        <tag>Java</tag>
-        <tag>Visual Studio Code</tag>
-      </tags>
   </entry>
   <entry>
     <title>使用 Vue 动态控制 Element-UI 的 DatePicker 选择范围</title>
@@ -1019,101 +989,72 @@ init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="lin
       </tags>
   </entry>
   <entry>
+    <title>VSCode 在代码片段中没有提示</title>
+    <url>/2021/05/31/VSCode%20%E5%9C%A8%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/</url>
+    <content><![CDATA[<p>默认情况下，在代码片段中（处于光标聚焦状态）是没有提示的。比如:</p>
+<span id="more"></span>
+
+<div style="width:90%;">
+<video width='100%' src="no.mp4" controls></video>
+</div>
+
+<p>要想在这种情况下有代码提示的话，就得将 <code>Snippets Prevent Quick Suggestions</code> 关闭，如下：</p>
+<div style="width:90%;">
+<img src="/2021/05/31/VSCode%20%E5%9C%A8%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E6%B2%A1%E6%9C%89%E6%8F%90%E7%A4%BA%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/suggestions.jpg" class="" title="Prevent-Quick-Suggestions">
+</div>
+
+<p>这样的话，在使用的代码片段时，也会有提示。</p>
+<div style="width:90%;">
+<video width='100%' src="yes.mp4" controls></video>
+</div>
+]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Yarn 1.x 常用命令</title>
+    <url>/2022/01/10/Yarn%201.x%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>记录一些 <a href="https://classic.yarnpkg.com/">yarn</a> dependency management 常用的命令…..</p>
+<span id="more"></span>
+
+<h1 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h1><h2 id="yarn-add-lt-package…-gt-–dev-x2F-D"><a href="#yarn-add-lt-package…-gt-–dev-x2F-D" class="headerlink" title="yarn add &lt;package…&gt; [–dev&#x2F;-D]"></a>yarn add &lt;package…&gt; [–dev&#x2F;-D]</h2><p>使用 <code>--dev</code> 或者 <code>-D</code> 将依赖安装到 devDependencies（只在开发环境下生效）中。</p>
+<h1 id="删除依赖"><a href="#删除依赖" class="headerlink" title="删除依赖"></a>删除依赖</h1><p>运行 <code>yarn remove 包名</code> 将从你的直接依赖中删除名指定名称的包，在这个过程中会更新 package.json 和 yarn.lock 文件。</p>
+<h1 id="升级依赖"><a href="#升级依赖" class="headerlink" title="升级依赖"></a>升级依赖</h1><h2 id="yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern"><a href="#yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern" class="headerlink" title="yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]"></a>yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]</h2><p>该命令根据 package.json 文件中指定的版本范围，将依赖关系更新为最新版本。yarn.lock文件也将被重新创建。</p>
+<p>可以选择指定一个或多个软件包的名称。当指定了包的名字时，只有这些包会被升级。当没有指定包的名字时，所有的依赖将被升级。</p>
+<p><code>[package]</code> : 当指定的包只是一个名字时，那么这个包的最新匹配版本将被升级到。</p>
+<p><code>[package@tag]</code> : 当指定的软件包包含一个标签时，指定的标签将被升级到。标签名称是由项目维护者选择的，通常你使用这个命令来安装一个正在开发的软件包的实验性或长期支持版本。你选择的标签将是出现在 package.json 文件中的版本。</p>
+<p><code>[package@version]</code> : 当一个指定的软件包包含一个版本时，那么指定的版本将被升级到。package.json的依赖关系参考也将被改变，以匹配这个指定的版本。你可以使用任何SemVer版本号或范围。</p>
+<p><code>--ignore-engines</code> : 这个标志可以用来跳过引擎检查。</p>
+<h2 id="yarn-upgrade-interactive-–latest-显示一个选择列表"><a href="#yarn-upgrade-interactive-–latest-显示一个选择列表" class="headerlink" title="yarn upgrade-interactive [–latest] 显示一个选择列表"></a>yarn upgrade-interactive [–latest] 显示一个选择列表</h2><p>使用 <code>upgrade-interactive</code> 命令会在终端显示可升级的包列表，按 <code>&lt;空格&gt;</code> 选择，<code>&lt;a&gt;</code> 切换所有，<code>&lt;i&gt;</code>反转选择。</p>
+<p><code>--latest</code>: 这个标志告诉 yarn 忽略 package.json 中指定的版本范围，而使用注册表中标记的最新版本。</p>
+<h1 id="查看依赖"><a href="#查看依赖" class="headerlink" title="查看依赖"></a>查看依赖</h1><h2 id="yarn-list"><a href="#yarn-list" class="headerlink" title="yarn list"></a>yarn list</h2><p>list 命令通过引用所有包管理器的元数据文件，包括项目的依赖关系，列出当前工作目录下的所有依赖关系。</p>
+<h2 id="yarn-list-–depth-–pattern"><a href="#yarn-list-–depth-–pattern" class="headerlink" title="yarn list [–depth] [–pattern]"></a>yarn list [–depth] [–pattern]</h2><p>默认情况下，所有软件包和它们的依赖关系将被显示出来。要限制依赖关系的深度，你可以在 list 命令中加入一个标志 <code>--深度</code>，以及想要的级别。例如：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="管理全局环境下的包"><a href="#管理全局环境下的包" class="headerlink" title="管理全局环境下的包"></a>管理全局环境下的包</h1><p>以上的命令只针对具体的一个工程，如果要管理全局环境下的包，则需要使用 <code>yarn global</code>。</p>
+<p><code>yarn global</code> 是一个前缀，用于一些命令，如 <code>add</code>、<code>list</code> 和 <code>remove</code>。除了使用一个全局目录来存储软件包外，它们的行为与普通版本完全一样。</p>
+<p>例如： </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> global <span class="token function">add</span>
+<span class="token function">yarn</span> global list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token function">yarn</span> global upgrade-interactive<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<div class="note danger no-icon"><p>注意：与 npm 中的 –global 标志不同，global 是一个必须紧跟 yarn 的命令。输入 yarn add global package-name 将在本地添加名为 global 和 package-name 的软件包，而不是在全局添加 package-name。</p>
+</div>]]></content>
+  </entry>
+  <entry>
+    <title>为什么不能修改 Twitter 的显示名称</title>
+    <url>/2024/04/06/why-can-t-you-modify-the-display-name-on-twitter/</url>
+    <content><![CDATA[<blockquote><p><strong>Note:</strong> When you are initially going through your profile set-up, you will not see the option to change your display name, until you have a profile and header photo uploaded. </p>
+<footer><strong>@Twitter</strong><cite><a href="https://help.twitter.com/en/managing-your-account/how-to-customize-your-profile">help.twitter.com/en/managing-your-account/how-to-customize-your-profile</a></cite></footer></blockquote>]]></content>
+  </entry>
+  <entry>
     <title>为 Git 设置代理</title>
     <url>/2024/08/16/%E4%B8%BA-Git-%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h1 id="Git-使用-HTTP-x2F-HTTPS-传输协议的代理方法"><a href="#Git-使用-HTTP-x2F-HTTPS-传输协议的代理方法" class="headerlink" title="Git 使用 HTTP &#x2F; HTTPS 传输协议的代理方法"></a>Git 使用 HTTP &#x2F; HTTPS 传输协议的代理方法</h1><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">git config <span class="token operator">-</span><span class="token operator">-</span>global http<span class="token operator">.</span>proxy <span class="token operator">&lt;</span>protocol<span class="token operator">></span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token operator">&lt;</span>host<span class="token operator">></span><span class="token punctuation">:</span><span class="token operator">&lt;</span>port<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>例如：</p>
 <pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">git config <span class="token operator">-</span><span class="token operator">-</span>global http<span class="token operator">.</span>proxy http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token operator">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9999</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>使用 Hexo 写作</title>
-    <url>/2021/02/21/%E4%BD%BF%E7%94%A8%20Hexo%20%E5%86%99%E4%BD%9C/</url>
-    <content><![CDATA[<p>标签插件和 Front-matter 中的标签不同，它们是用于在文章中快速插入特定内容的插件。</p>
-<p>虽然你可以使用任何格式书写你的文章，但是标签插件永远可用，且语法也都是一致的。</p>
-<span id="more"></span>
-
-<h1 id="Hexo-标签"><a href="#Hexo-标签" class="headerlink" title="Hexo 标签"></a>Hexo 标签</h1><blockquote><p>因为使用 Markdown ，所以只列举一些特别的标签。</p>
-<footer><strong>Hexo</strong><cite><a href="https://hexo.io/zh-cn/docs/tag-plugins">hexo.io/zh-cn/docs/tag-plugins</a></cite></footer></blockquote>
-
-<h2 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h2><p>在文章中插入引言，可包含作者、来源和标题</p>
-<p>别号： quote</p>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% blockquote [author[, source]] [link] [source_link_title] %&#125;
-content
-&#123;% endblockquote %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h2><p>在文章中插入 iframe。</p>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% iframe url [width] [height] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="文章摘要和截断"><a href="#文章摘要和截断" class="headerlink" title="文章摘要和截断"></a>文章摘要和截断</h2><p>在文章中使用 <code>&lt;!-- more --&gt;</code>，那么 <code>&lt;!-- more --&gt;</code> 之前的文字将会被视为摘要。首页中将只出现这部分文字，同时这部分文字也会出现在正文之中。</p>
-<h2 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h2><p>在文章中插入代码。</p>
-<p>别名： code</p>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock [title] [lang:language] [url] [link text] [additional options] %&#125;
-code snippet
-&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<ol>
-<li>普通的代码块</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock %&#125;
-alert(&#39;Hello World!&#39;);
-&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-none"><code class="language-none">alert(&#39;Hello World!&#39;);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="2">
-<li>指定语言</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:objc %&#125;
-[rectangle setX: 10 y: 10 width: 20 height: 20];
-&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-objectivec" data-language="objectivec"><code class="language-objectivec"><span class="token punctuation">[</span>rectangle setX<span class="token punctuation">:</span> <span class="token number">10</span> y<span class="token punctuation">:</span> <span class="token number">10</span> width<span class="token punctuation">:</span> <span class="token number">20</span> height<span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="3">
-<li>附加说明和网址</li>
-</ol>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:js Array.map https:&#x2F;&#x2F;developer.mozilla.org&#x2F;zh-CN&#x2F;docs&#x2F;Web&#x2F;JavaScript&#x2F;Reference&#x2F;Global_Objects&#x2F;Array&#x2F;map Array.prototype.map() - JavaScript | MDN %&#125;
-const array1 &#x3D; [1, 4, 9, 16];
-
-&#x2F;&#x2F; pass a function to map
-const map1 &#x3D; array1.map(x &#x3D;&gt; x * 2);
-
-console.log(map1);
-&#x2F;&#x2F; expected output: Array [2, 8, 18, 32]
-&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-javascript" data-language="javascript"><div class="caption"><span>Array.map</span><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map">Array.prototype.map() - JavaScript | MDN</a></div><code class="language-javascript"><span class="token keyword">const</span> array1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-<span class="token comment">// pass a function to map</span>
-<span class="token keyword">const</span> map1 <span class="token operator">=</span> array1<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">x</span> <span class="token operator">=></span> x \<span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>map1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// expected output: Array [2, 8, 18, 32]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="反引号代码块"><a href="#反引号代码块" class="headerlink" title="反引号代码块"></a>反引号代码块</h2><p>另一种形式的代码块，不同的是它使用三个反引号来包裹。</p>
-<pre class="line-numbers language-none"><code class="language-none">&#96;&#96;&#96; [language] [title] [url] [link text] code snippet &#96;&#96;&#96;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h2><p>在文章中插入链接，并自动给外部链接添加 <code>target=&quot;_blank&quot;</code> 属性。</p>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% link text url [external] [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="资源的引用"><a href="#资源的引用" class="headerlink" title="资源的引用"></a>资源的引用</h1><blockquote>
-<p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的 Hexo 项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
-</blockquote>
-<p>将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开，这样 Hexo 将会在你每一次通过<code> hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个与文章同名的文件夹，当然也可以手动创建。</p>
-<pre class="line-numbers language-yaml" data-language="yaml"><div class="caption"><span>_config.yml</span></div><code class="language-yaml"><span class="token key atrule">post_asset_folder</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>通过常规的 <code>markdown</code> 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。使用以下 <code>Hexo</code> 标签来加载资源：</p>
-<pre class="line-numbers language-none"><code class="language-none">&#123;% asset_path slug %&#125;
-&#123;% asset_img slug [title] %&#125;
-&#123;% asset_link slug [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>例如：<code>&#123;% asset_img Pikachu.jpg Pikachu %&#125;</code></p>
-<img src="/2021/02/21/%E4%BD%BF%E7%94%A8%20Hexo%20%E5%86%99%E4%BD%9C/Pikachu.jpg" class="" title="Pikachu">
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
   </entry>
   <entry>
     <title>使用 RestTemplate 发送 JSON 或者 x-www-form-urlencoded</title>
@@ -1176,185 +1117,6 @@ response<span class="token punctuation">.</span><span class="token function">get
 ]]></content>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>使用 VisualVM 远程连接 JVM</title>
-    <url>/2022/12/06/%E4%BD%BF%E7%94%A8%20VisualVM%20%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%20JVM/</url>
-    <content><![CDATA[<h1 id="修改-Java-配置"><a href="#修改-Java-配置" class="headerlink" title="修改 Java 配置"></a>修改 Java 配置</h1><span id="more"></span>
-
-<ol>
-<li><p>首先进入 <code>$&#123;JAVA_HOME&#125;/jre/lib/management/</code> (Java8 之后在 <code>/conf/management</code>) 目录。</p>
-</li>
-<li><p>重命名 <em>jmxremote.password.template</em>。</p>
-</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> jmxremote.password.template jmxremote.password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ol start="3">
-<li>修改该文件，去掉如下内容的注释。</li>
-</ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">monitorRole  QED
-controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h1 id="添加运行参数"><a href="#添加运行参数" class="headerlink" title="添加运行参数"></a>添加运行参数</h1><p>如果使用 tomcat 就修改 bin&#x2F;catalina.sh (.bat) 文件添加参数。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在 tomcat的 bin 目录下，修改 catalina.sh，添加如下参数</span>
-<span class="token assign-left variable">JAVA_OPTS</span><span class="token operator">=</span><span class="token string">"
--Dcom.sun.management.jmxremote 
--Dcom.sun.management.jmxremote.port=9999
--Dcom.sun.management.jmxremote.authenticate=false
--Dcom.sun.management.jmxremote.ssl=false"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>使用 jar 包启动就在启动时添加参数：</p>
-<p>启动参数示例：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">java</span> 
-<span class="token parameter variable">-Dcom.sun.management.jmxremote</span> 
-<span class="token parameter variable">-Dcom.sun.management.jmxremote.port</span><span class="token operator">=</span><span class="token number">9999</span> 
-<span class="token parameter variable">-Dcom.sun.management.jmxremote.local.only</span><span class="token operator">=</span>false 
-<span class="token parameter variable">-Dcom.sun.management.jmxremote.authenticate</span><span class="token operator">=</span>false  
-<span class="token parameter variable">-Dcom.sun.management.jmxremote.ssl</span><span class="token operator">=</span>false 
-<span class="token parameter variable">-Djava.rmi.server.hostname</span><span class="token operator">=</span> your server <span class="token function">host</span> 
-<span class="token parameter variable">-jar</span> xxx.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p> JMX Server 还会随机额外的去监听两个端口，所以在远程连接时我们本地的JMX在连接时也会尝试去连接监听端口。</p>
- <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jps <span class="token parameter variable">-l</span>
-
-<span class="token function">lsof</span> -i<span class="token operator">|</span><span class="token function">grep</span> xxx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-Dcom.sun.management.jmxremote</td>
-<td>允许使用 JMX 远程连接</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.port</td>
-<td>指定 JMX 启动的代理端口，即 visualvm 要连接的端口</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.local.only</td>
-<td>只允许本地连接</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.authenticate</td>
-<td>指定了JMX是否启用鉴权（需要用户名，密码鉴权）</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.ssl</td>
-<td>指定 JMX 是否启用 ssl</td>
-</tr>
-<tr>
-<td>-Djava.rmi.server.hostname</td>
-<td>指定服务器主机名</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.rmi.port</td>
-<td>将这个端口和 jmx.port 的端口设置成一个端口，这样防火墙就只需要放行一个端口</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.access.file</td>
-<td>用户权限文件路径</td>
-</tr>
-<tr>
-<td>-Dcom.sun.management.jmxremote.password.file</td>
-<td>密码文件路径</td>
-</tr>
-</tbody></table>
-<p>通过以上配置便可以在 VisualVM 中使用 JMX 连接。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Yarn 1.x 常用命令</title>
-    <url>/2022/01/10/Yarn%201.x%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>记录一些 <a href="https://classic.yarnpkg.com/">yarn</a> dependency management 常用的命令…..</p>
-<span id="more"></span>
-
-<h1 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h1><h2 id="yarn-add-lt-package…-gt-–dev-x2F-D"><a href="#yarn-add-lt-package…-gt-–dev-x2F-D" class="headerlink" title="yarn add &lt;package…&gt; [–dev&#x2F;-D]"></a>yarn add &lt;package…&gt; [–dev&#x2F;-D]</h2><p>使用 <code>--dev</code> 或者 <code>-D</code> 将依赖安装到 devDependencies（只在开发环境下生效）中。</p>
-<h1 id="删除依赖"><a href="#删除依赖" class="headerlink" title="删除依赖"></a>删除依赖</h1><p>运行 <code>yarn remove 包名</code> 将从你的直接依赖中删除名指定名称的包，在这个过程中会更新 package.json 和 yarn.lock 文件。</p>
-<h1 id="升级依赖"><a href="#升级依赖" class="headerlink" title="升级依赖"></a>升级依赖</h1><h2 id="yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern"><a href="#yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern" class="headerlink" title="yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]"></a>yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]</h2><p>该命令根据 package.json 文件中指定的版本范围，将依赖关系更新为最新版本。yarn.lock文件也将被重新创建。</p>
-<p>可以选择指定一个或多个软件包的名称。当指定了包的名字时，只有这些包会被升级。当没有指定包的名字时，所有的依赖将被升级。</p>
-<p><code>[package]</code> : 当指定的包只是一个名字时，那么这个包的最新匹配版本将被升级到。</p>
-<p><code>[package@tag]</code> : 当指定的软件包包含一个标签时，指定的标签将被升级到。标签名称是由项目维护者选择的，通常你使用这个命令来安装一个正在开发的软件包的实验性或长期支持版本。你选择的标签将是出现在 package.json 文件中的版本。</p>
-<p><code>[package@version]</code> : 当一个指定的软件包包含一个版本时，那么指定的版本将被升级到。package.json的依赖关系参考也将被改变，以匹配这个指定的版本。你可以使用任何SemVer版本号或范围。</p>
-<p><code>--ignore-engines</code> : 这个标志可以用来跳过引擎检查。</p>
-<h2 id="yarn-upgrade-interactive-–latest-显示一个选择列表"><a href="#yarn-upgrade-interactive-–latest-显示一个选择列表" class="headerlink" title="yarn upgrade-interactive [–latest] 显示一个选择列表"></a>yarn upgrade-interactive [–latest] 显示一个选择列表</h2><p>使用 <code>upgrade-interactive</code> 命令会在终端显示可升级的包列表，按 <code>&lt;空格&gt;</code> 选择，<code>&lt;a&gt;</code> 切换所有，<code>&lt;i&gt;</code>反转选择。</p>
-<p><code>--latest</code>: 这个标志告诉 yarn 忽略 package.json 中指定的版本范围，而使用注册表中标记的最新版本。</p>
-<h1 id="查看依赖"><a href="#查看依赖" class="headerlink" title="查看依赖"></a>查看依赖</h1><h2 id="yarn-list"><a href="#yarn-list" class="headerlink" title="yarn list"></a>yarn list</h2><p>list 命令通过引用所有包管理器的元数据文件，包括项目的依赖关系，列出当前工作目录下的所有依赖关系。</p>
-<h2 id="yarn-list-–depth-–pattern"><a href="#yarn-list-–depth-–pattern" class="headerlink" title="yarn list [–depth] [–pattern]"></a>yarn list [–depth] [–pattern]</h2><p>默认情况下，所有软件包和它们的依赖关系将被显示出来。要限制依赖关系的深度，你可以在 list 命令中加入一个标志 <code>--深度</code>，以及想要的级别。例如：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h1 id="管理全局环境下的包"><a href="#管理全局环境下的包" class="headerlink" title="管理全局环境下的包"></a>管理全局环境下的包</h1><p>以上的命令只针对具体的一个工程，如果要管理全局环境下的包，则需要使用 <code>yarn global</code>。</p>
-<p><code>yarn global</code> 是一个前缀，用于一些命令，如 <code>add</code>、<code>list</code> 和 <code>remove</code>。除了使用一个全局目录来存储软件包外，它们的行为与普通版本完全一样。</p>
-<p>例如： </p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> global <span class="token function">add</span>
-<span class="token function">yarn</span> global list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span>
-<span class="token function">yarn</span> global upgrade-interactive<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<div class="note danger no-icon"><p>注意：与 npm 中的 –global 标志不同，global 是一个必须紧跟 yarn 的命令。输入 yarn add global package-name 将在本地添加名为 global 和 package-name 的软件包，而不是在全局添加 package-name。</p>
-</div>]]></content>
-  </entry>
-  <entry>
-    <title>使用 craco</title>
-    <url>/2021/04/03/%E4%BD%BF%E7%94%A8%20craco/</url>
-    <content><![CDATA[<p><code>Craco</code> 的配置示例</p>
-<span id="more"></span>
-
-<blockquote><p>Create React App Configuration Override is an easy and comprehensible configuration layer for create-react-app.</p>
-<p>Get all the benefits of <code>create-react-app</code> and customization without using <code>eject</code> by adding a single <code>craco.config.js</code> file at the root of your application and customize your eslint, babel, postcss configurations and many more.</p>
-<p>All you have to do is create your app using <a href="https://create-react-app.dev/">create-react-app</a> and customize the configuration with a craco.config.js file.</p>
-<footer><strong>gsoft-inc</strong><cite><a href="https://github.com/gsoft-inc/craco#craco">CRACO</a></cite></footer></blockquote>
-
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> <span class="token function">add</span> <span class="token parameter variable">-D</span> @craco/craco<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>创建配置文件：</p>
-<pre class="line-numbers language-none"><code class="language-none">my-app
-├── node_modules
-├── craco.config.js
-└── package.json<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>更新脚本命令</p>
-<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">/* package.json */
-
-"scripts": &#123;
-<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "start": "react-scripts start",
-</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "start": "craco start",
-</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "build": "react-scripts build",
-</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "build": "craco build"
-</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "test": "react-scripts test",
-</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "test": "craco test"
-</span></span>&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h1 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h1><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> CracoLessPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"craco-less"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> AntdDayjsWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"antd-dayjs-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> SimpleProgressWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"simple-progress-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">&#123;</span>
-      <span class="token literal-property property">plugin</span><span class="token operator">:</span> CracoLessPlugin<span class="token punctuation">,</span>
-      <span class="token literal-property property">options</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-        <span class="token literal-property property">lessLoaderOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">lessOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">javascriptEnabled</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">webpack</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-    <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token keyword">new</span> <span class="token class-name">AntdDayjsWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">SimpleProgressWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">"antd-dayjs-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.0.6"</span><span class="token punctuation">,</span>
-  <span class="token property">"craco-less"</span><span class="token operator">:</span> <span class="token string">"^1.17.1"</span><span class="token punctuation">,</span>
-  <span class="token property">"simple-progress-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.1.2"</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-]]></content>
-      <tags>
-        <tag>React</tag>
       </tags>
   </entry>
   <entry>
@@ -1472,6 +1234,185 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
+    <title>使用 Hexo 写作</title>
+    <url>/2021/02/21/%E4%BD%BF%E7%94%A8%20Hexo%20%E5%86%99%E4%BD%9C/</url>
+    <content><![CDATA[<p>标签插件和 Front-matter 中的标签不同，它们是用于在文章中快速插入特定内容的插件。</p>
+<p>虽然你可以使用任何格式书写你的文章，但是标签插件永远可用，且语法也都是一致的。</p>
+<span id="more"></span>
+
+<h1 id="Hexo-标签"><a href="#Hexo-标签" class="headerlink" title="Hexo 标签"></a>Hexo 标签</h1><blockquote><p>因为使用 Markdown ，所以只列举一些特别的标签。</p>
+<footer><strong>Hexo</strong><cite><a href="https://hexo.io/zh-cn/docs/tag-plugins">hexo.io/zh-cn/docs/tag-plugins</a></cite></footer></blockquote>
+
+<h2 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h2><p>在文章中插入引言，可包含作者、来源和标题</p>
+<p>别号： quote</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% blockquote [author[, source]] [link] [source_link_title] %&#125;
+content
+&#123;% endblockquote %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h2><p>在文章中插入 iframe。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% iframe url [width] [height] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="文章摘要和截断"><a href="#文章摘要和截断" class="headerlink" title="文章摘要和截断"></a>文章摘要和截断</h2><p>在文章中使用 <code>&lt;!-- more --&gt;</code>，那么 <code>&lt;!-- more --&gt;</code> 之前的文字将会被视为摘要。首页中将只出现这部分文字，同时这部分文字也会出现在正文之中。</p>
+<h2 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h2><p>在文章中插入代码。</p>
+<p>别名： code</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock [title] [lang:language] [url] [link text] [additional options] %&#125;
+code snippet
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<ol>
+<li>普通的代码块</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock %&#125;
+alert(&#39;Hello World!&#39;);
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">alert(&#39;Hello World!&#39;);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>指定语言</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:objc %&#125;
+[rectangle setX: 10 y: 10 width: 20 height: 20];
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-objectivec" data-language="objectivec"><code class="language-objectivec"><span class="token punctuation">[</span>rectangle setX<span class="token punctuation">:</span> <span class="token number">10</span> y<span class="token punctuation">:</span> <span class="token number">10</span> width<span class="token punctuation">:</span> <span class="token number">20</span> height<span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>附加说明和网址</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:js Array.map https:&#x2F;&#x2F;developer.mozilla.org&#x2F;zh-CN&#x2F;docs&#x2F;Web&#x2F;JavaScript&#x2F;Reference&#x2F;Global_Objects&#x2F;Array&#x2F;map Array.prototype.map() - JavaScript | MDN %&#125;
+const array1 &#x3D; [1, 4, 9, 16];
+
+&#x2F;&#x2F; pass a function to map
+const map1 &#x3D; array1.map(x &#x3D;&gt; x * 2);
+
+console.log(map1);
+&#x2F;&#x2F; expected output: Array [2, 8, 18, 32]
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><div class="caption"><span>Array.map</span><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map">Array.prototype.map() - JavaScript | MDN</a></div><code class="language-javascript"><span class="token keyword">const</span> array1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token comment">// pass a function to map</span>
+<span class="token keyword">const</span> map1 <span class="token operator">=</span> array1<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">x</span> <span class="token operator">=></span> x \<span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>map1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// expected output: Array [2, 8, 18, 32]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="反引号代码块"><a href="#反引号代码块" class="headerlink" title="反引号代码块"></a>反引号代码块</h2><p>另一种形式的代码块，不同的是它使用三个反引号来包裹。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#96;&#96;&#96; [language] [title] [url] [link text] code snippet &#96;&#96;&#96;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h2><p>在文章中插入链接，并自动给外部链接添加 <code>target=&quot;_blank&quot;</code> 属性。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% link text url [external] [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="资源的引用"><a href="#资源的引用" class="headerlink" title="资源的引用"></a>资源的引用</h1><blockquote>
+<p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的 Hexo 项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
+</blockquote>
+<p>将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开，这样 Hexo 将会在你每一次通过<code> hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个与文章同名的文件夹，当然也可以手动创建。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><div class="caption"><span>_config.yml</span></div><code class="language-yaml"><span class="token key atrule">post_asset_folder</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>通过常规的 <code>markdown</code> 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。使用以下 <code>Hexo</code> 标签来加载资源：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% asset_path slug %&#125;
+&#123;% asset_img slug [title] %&#125;
+&#123;% asset_link slug [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>例如：<code>&#123;% asset_img Pikachu.jpg Pikachu %&#125;</code></p>
+<img src="/2021/02/21/%E4%BD%BF%E7%94%A8%20Hexo%20%E5%86%99%E4%BD%9C/Pikachu.jpg" class="" title="Pikachu">
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 VisualVM 远程连接 JVM</title>
+    <url>/2022/12/06/%E4%BD%BF%E7%94%A8%20VisualVM%20%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5%20JVM/</url>
+    <content><![CDATA[<h1 id="修改-Java-配置"><a href="#修改-Java-配置" class="headerlink" title="修改 Java 配置"></a>修改 Java 配置</h1><span id="more"></span>
+
+<ol>
+<li><p>首先进入 <code>$&#123;JAVA_HOME&#125;/jre/lib/management/</code> (Java8 之后在 <code>/conf/management</code>) 目录。</p>
+</li>
+<li><p>重命名 <em>jmxremote.password.template</em>。</p>
+</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> jmxremote.password.template jmxremote.password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>修改该文件，去掉如下内容的注释。</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">monitorRole  QED
+controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="添加运行参数"><a href="#添加运行参数" class="headerlink" title="添加运行参数"></a>添加运行参数</h1><p>如果使用 tomcat 就修改 bin&#x2F;catalina.sh (.bat) 文件添加参数。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在 tomcat的 bin 目录下，修改 catalina.sh，添加如下参数</span>
+<span class="token assign-left variable">JAVA_OPTS</span><span class="token operator">=</span><span class="token string">"
+-Dcom.sun.management.jmxremote 
+-Dcom.sun.management.jmxremote.port=9999
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 jar 包启动就在启动时添加参数：</p>
+<p>启动参数示例：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">java</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.port</span><span class="token operator">=</span><span class="token number">9999</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.local.only</span><span class="token operator">=</span>false 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.authenticate</span><span class="token operator">=</span>false  
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.ssl</span><span class="token operator">=</span>false 
+<span class="token parameter variable">-Djava.rmi.server.hostname</span><span class="token operator">=</span> your server <span class="token function">host</span> 
+<span class="token parameter variable">-jar</span> xxx.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p> JMX Server 还会随机额外的去监听两个端口，所以在远程连接时我们本地的JMX在连接时也会尝试去连接监听端口。</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jps <span class="token parameter variable">-l</span>
+
+<span class="token function">lsof</span> -i<span class="token operator">|</span><span class="token function">grep</span> xxx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Dcom.sun.management.jmxremote</td>
+<td>允许使用 JMX 远程连接</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.port</td>
+<td>指定 JMX 启动的代理端口，即 visualvm 要连接的端口</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.local.only</td>
+<td>只允许本地连接</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.authenticate</td>
+<td>指定了JMX是否启用鉴权（需要用户名，密码鉴权）</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.ssl</td>
+<td>指定 JMX 是否启用 ssl</td>
+</tr>
+<tr>
+<td>-Djava.rmi.server.hostname</td>
+<td>指定服务器主机名</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.rmi.port</td>
+<td>将这个端口和 jmx.port 的端口设置成一个端口，这样防火墙就只需要放行一个端口</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.access.file</td>
+<td>用户权限文件路径</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.password.file</td>
+<td>密码文件路径</td>
+</tr>
+</tbody></table>
+<p>通过以上配置便可以在 VisualVM 中使用 JMX 连接。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>使用 MyBatis-Plus 更新字段为 null 值时报错</title>
     <url>/2023/11/18/%E4%BD%BF%E7%94%A8-MyBatis-Plus-%E6%9B%B4%E6%96%B0%E5%AD%97%E6%AE%B5%E4%B8%BA-null-%E5%80%BC%E6%97%B6%E6%8A%A5%E9%94%99/</url>
     <content><![CDATA[<p>事情发生在使用 <strong>Oracle 数据库</strong> 时，通过 <code>UpdateWrapper</code> 更新一个字段为 null 时报了如下错误：</p>
@@ -1551,6 +1492,65 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
+    <title>使用 craco</title>
+    <url>/2021/04/03/%E4%BD%BF%E7%94%A8%20craco/</url>
+    <content><![CDATA[<p><code>Craco</code> 的配置示例</p>
+<span id="more"></span>
+
+<blockquote><p>Create React App Configuration Override is an easy and comprehensible configuration layer for create-react-app.</p>
+<p>Get all the benefits of <code>create-react-app</code> and customization without using <code>eject</code> by adding a single <code>craco.config.js</code> file at the root of your application and customize your eslint, babel, postcss configurations and many more.</p>
+<p>All you have to do is create your app using <a href="https://create-react-app.dev/">create-react-app</a> and customize the configuration with a craco.config.js file.</p>
+<footer><strong>gsoft-inc</strong><cite><a href="https://github.com/gsoft-inc/craco#craco">CRACO</a></cite></footer></blockquote>
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> <span class="token function">add</span> <span class="token parameter variable">-D</span> @craco/craco<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>创建配置文件：</p>
+<pre class="line-numbers language-none"><code class="language-none">my-app
+├── node_modules
+├── craco.config.js
+└── package.json<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>更新脚本命令</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">/* package.json */
+
+"scripts": &#123;
+<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "start": "react-scripts start",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "start": "craco start",
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "build": "react-scripts build",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "build": "craco build"
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "test": "react-scripts test",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "test": "craco test"
+</span></span>&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h1><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> CracoLessPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"craco-less"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> AntdDayjsWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"antd-dayjs-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SimpleProgressWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"simple-progress-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">plugin</span><span class="token operator">:</span> CracoLessPlugin<span class="token punctuation">,</span>
+      <span class="token literal-property property">options</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">lessLoaderOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">lessOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">javascriptEnabled</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">webpack</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token keyword">new</span> <span class="token class-name">AntdDayjsWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">SimpleProgressWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"antd-dayjs-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.0.6"</span><span class="token punctuation">,</span>
+  <span class="token property">"craco-less"</span><span class="token operator">:</span> <span class="token string">"^1.17.1"</span><span class="token punctuation">,</span>
+  <span class="token property">"simple-progress-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.1.2"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>修复 NVIDIA GPU 活动面板模糊的问题</title>
     <url>/2022/01/14/%E4%BF%AE%E5%A4%8D%20NVIDIA%20GPU%20%E6%B4%BB%E5%8A%A8%E9%9D%A2%E6%9D%BF%E6%A8%A1%E7%B3%8A%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>长久以来伴随着打开这玩意儿就显示模糊的问题的确是<del>让人荡气回肠，精彩纷呈，读来</del>令人茶饭不思，一病不起 😑。。。</p>
@@ -1586,6 +1586,13 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
+    <title>去除 WinRAR 的弹窗广告</title>
+    <url>/2022/03/13/%E5%8E%BB%E9%99%A4%20WinRAR%20%E5%B9%BF%E5%91%8A/</url>
+    <content><![CDATA[<p>首先需要下载 Resource_Hacker 这个软件</p>
+<p>链接：<a href="https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA">https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA</a><br>提取码：ls86</p>
+]]></content>
+  </entry>
+  <entry>
     <title>删除 Windows Defender 历史保护记录</title>
     <url>/2021/10/10/%E5%88%A0%E9%99%A4%20Windows%20Defender%20%E5%8E%86%E5%8F%B2%E4%BF%9D%E6%8A%A4%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<p>删除 <strong>DetectionHistory</strong> 目录下的所有文件夹和文件： 👇</p>
@@ -1599,11 +1606,52 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
-    <title>去除 WinRAR 的弹窗广告</title>
-    <url>/2022/03/13/%E5%8E%BB%E9%99%A4%20WinRAR%20%E5%B9%BF%E5%91%8A/</url>
-    <content><![CDATA[<p>首先需要下载 Resource_Hacker 这个软件</p>
-<p>链接：<a href="https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA">https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA</a><br>提取码：ls86</p>
+    <title>只在更新时运行 effect</title>
+    <url>/2021/07/20/%E5%8F%AA%E5%9C%A8%E6%9B%B4%E6%96%B0%E6%97%B6%E8%BF%90%E8%A1%8C%20effect/</url>
+    <content><![CDATA[<blockquote><p>这是个比较罕见的使用场景。如果你需要的话，你可以 <a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables">使用一个可变的 ref</a> 手动存储一个布尔值来表示是首次渲染还是后续渲染，然后在你的 effect 中检查这个标识。（如果你发现自己经常在这么做，你可以为之创建一个自定义 Hook。</p>
+<footer><strong>@Hooks FAQ</strong><cite><a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates">zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates</a></cite></footer></blockquote>
+
+<span id="more"></span>
+
+<br />
+
+<p>💻 编写代码如下：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef<span class="token punctuation">,</span> useState <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 仅在更新时执行
+ *
+ * @param &#123;React.EffectCallback&#125; effect
+ * @param &#123;React.DependencyList&#125; deps
+ */</span>
+<span class="token keyword">function</span> <span class="token function">useUpdateEffect</span><span class="token punctuation">(</span><span class="token parameter">effect<span class="token punctuation">,</span> deps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> hasMounted <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hasMounted<span class="token punctuation">.</span>current<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token function">effect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> deps<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    hasMounted<span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>❓ 疑问：</p>
+<p>这样使用的话 <code>eslint-plugin-react-hooks</code> 会产生两个警告：</p>
+<ol>
+<li><p>React Hook useEffect was passed a dependency list that is not an array literal. This means we can’t statically verify whether you’ve passed the correct dependencies. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
+</li>
+<li><p>React Hook useEffect has a missing dependency: ‘effect’. Either include it or remove the dependency array. If ‘effect’ changes too often, find the parent component that defines it and wrap that definition in useCallback. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
+</li>
+</ol>
+<p>会有什么问题呢 😶 ❔</p>
 ]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
   </entry>
   <entry>
     <title>在 React 中初始化 ECharts</title>
@@ -1655,52 +1703,35 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </tags>
   </entry>
   <entry>
-    <title>只在更新时运行 effect</title>
-    <url>/2021/07/20/%E5%8F%AA%E5%9C%A8%E6%9B%B4%E6%96%B0%E6%97%B6%E8%BF%90%E8%A1%8C%20effect/</url>
-    <content><![CDATA[<blockquote><p>这是个比较罕见的使用场景。如果你需要的话，你可以 <a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables">使用一个可变的 ref</a> 手动存储一个布尔值来表示是首次渲染还是后续渲染，然后在你的 effect 中检查这个标识。（如果你发现自己经常在这么做，你可以为之创建一个自定义 Hook。</p>
-<footer><strong>@Hooks FAQ</strong><cite><a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates">zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates</a></cite></footer></blockquote>
-
+    <title>在 Windows 下使用命令行计算文件校验值</title>
+    <url>/2023/01/01/%E5%9C%A8-Windows-%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%96%87%E4%BB%B6%E6%A0%A1%E9%AA%8C%E5%80%BC/</url>
+    <content><![CDATA[<p>在 Windows 中可以使用命令 <code>certutil</code> 来计算文件的校验值。</p>
 <span id="more"></span>
 
-<br />
+<div style="width:65%;">
+<img src="/2023/01/01/%E5%9C%A8-Windows-%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%96%87%E4%BB%B6%E6%A0%A1%E9%AA%8C%E5%80%BC/command.png" class="">
+</div>
 
-<p>💻 编写代码如下：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef<span class="token punctuation">,</span> useState <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<p>通过 <code>certutil -hashfile -?</code> 可以知道它支持的哈希算法有: MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p>
+<p>那么要计算一个文件的 SHA256 值则可以使用：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> D:<span class="token punctuation">\</span>xxx<span class="token punctuation">\</span>xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<span class="token comment">/**
- * 仅在更新时执行
- *
- * @param &#123;React.EffectCallback&#125; effect
- * @param &#123;React.DependencyList&#125; deps
- */</span>
-<span class="token keyword">function</span> <span class="token function">useUpdateEffect</span><span class="token punctuation">(</span><span class="token parameter">effect<span class="token punctuation">,</span> deps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">const</span> hasMounted <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>或者相对路径：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>常用 cmd 命令</title>
+    <url>/2023/05/01/%E5%B8%B8%E7%94%A8-cmd-%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<ul>
+<li>查询端口号</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">netstat -ano|findstr 8080 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>hasMounted<span class="token punctuation">.</span>current<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-    <span class="token keyword">return</span> <span class="token function">effect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> deps<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
-    hasMounted<span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>❓ 疑问：</p>
-<p>这样使用的话 <code>eslint-plugin-react-hooks</code> 会产生两个警告：</p>
-<ol>
-<li><p>React Hook useEffect was passed a dependency list that is not an array literal. This means we can’t statically verify whether you’ve passed the correct dependencies. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
-</li>
-<li><p>React Hook useEffect has a missing dependency: ‘effect’. Either include it or remove the dependency array. If ‘effect’ changes too often, find the parent component that defines it and wrap that definition in useCallback. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
-</li>
-</ol>
-<p>会有什么问题呢 😶 ❔</p>
-]]></content>
-      <tags>
-        <tag>React</tag>
-      </tags>
+<ul>
+<li>查询进程</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">tasklist|findstr 进程ID
+taskkill &#x2F;pid 进程ID-t -f<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>]]></content>
   </entry>
   <entry>
     <title>Getting Started with JavaFX 11+</title>
@@ -1792,21 +1823,17 @@ studentService<span class="token punctuation">.</span><span class="token functio
       </categories>
   </entry>
   <entry>
-    <title>在 Windows 下使用命令行计算文件校验值</title>
-    <url>/2023/01/01/%E5%9C%A8-Windows-%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%96%87%E4%BB%B6%E6%A0%A1%E9%AA%8C%E5%80%BC/</url>
-    <content><![CDATA[<p>在 Windows 中可以使用命令 <code>certutil</code> 来计算文件的校验值。</p>
+    <title>设置 Git 区分文件名/目录名大小写</title>
+    <url>/2021/04/03/%E8%AE%A9%20Git%20%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99/</url>
+    <content><![CDATA[<p>如何设置 <code>Git</code> 区分大小写呢？</p>
 <span id="more"></span>
 
-<div style="width:65%;">
-<img src="/2023/01/01/%E5%9C%A8-Windows-%E4%B8%8B%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%AE%A1%E7%AE%97%E6%96%87%E4%BB%B6%E6%A0%A1%E9%AA%8C%E5%80%BC/command.png" class="">
-</div>
-
-<p>通过 <code>certutil -hashfile -?</code> 可以知道它支持的哈希算法有: MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p>
-<p>那么要计算一个文件的 SHA256 值则可以使用：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> D:<span class="token punctuation">\</span>xxx<span class="token punctuation">\</span>xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>或者相对路径：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+<p>进入 <code>Git</code> 仓库执行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config core.ignorecase <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
   </entry>
   <entry>
     <title>指定 create-react-app 启动时打开的浏览器</title>
@@ -1819,33 +1846,6 @@ studentService<span class="token punctuation">.</span><span class="token functio
       <tags>
         <tag>React</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>常用 cmd 命令</title>
-    <url>/2023/05/01/%E5%B8%B8%E7%94%A8-cmd-%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<ul>
-<li>查询端口号</li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">netstat -ano|findstr 8080 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ul>
-<li>查询进程</li>
-</ul>
-<pre class="line-numbers language-none"><code class="language-none">tasklist|findstr 进程ID
-taskkill &#x2F;pid 进程ID-t -f<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>]]></content>
-  </entry>
-  <entry>
-    <title>设置 Git 区分文件名/目录名大小写</title>
-    <url>/2021/04/03/%E8%AE%A9%20Git%20%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99/</url>
-    <content><![CDATA[<p>如何设置 <code>Git</code> 区分大小写呢？</p>
-<span id="more"></span>
-
-<p>进入 <code>Git</code> 仓库执行：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config core.ignorecase <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
   </entry>
   <entry>
     <title>获取本机win10的产品密钥</title>
