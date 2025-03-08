@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"alwilda.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="功能强大，符合人体工程学的 JVM IDE JetBrainsIntelliJ IDEA：JetBrains">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IntelliJ IDEA 的个人配置">
+<meta property="og:url" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/index.html">
+<meta property="og:site_name" content="Knowledge">
+<meta property="og:description" content="功能强大，符合人体工程学的 JVM IDE JetBrainsIntelliJ IDEA：JetBrains">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/wrap-1.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/wrap-2.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/auto-save.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/star-mark.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/prettier.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/disable-double.jpg">
+<meta property="og:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/line-comment-not-first.png">
+<meta property="article:published_time" content="2021-03-17T13:12:19.000Z">
+<meta property="article:modified_time" content="2025-03-02T08:12:15.349Z">
+<meta property="article:author" content="😳">
+<meta property="article:tag" content="IntelliJ IDEA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/wrap-1.jpg">
+
+
+<link rel="canonical" href="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/","path":"2021/03/17/my-configuration-for-intellij-idea/","title":"IntelliJ IDEA 的个人配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>IntelliJ IDEA 的个人配置 | Knowledge</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Knowledge</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">This'blog is for U</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-收集"><a href="/collector/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>收集</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%BD%93"><span class="nav-number">1.1.</span> <span class="nav-text">字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven"><span class="nav-number">1.2.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">浏览器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaFX"><span class="nav-number">1.4.</span> <span class="nav-text">JavaFX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E6%9B%B4%E6%96%B0"><span class="nav-number">1.5.</span> <span class="nav-text">关闭更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8D%A2%E8%A1%8C"><span class="nav-number">1.6.</span> <span class="nav-text">自动换行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81"><span class="nav-number">1.7.</span> <span class="nav-text">文件编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E8%87%AA%E5%8A%A8%E4%BF%9D%E5%AD%98"><span class="nav-number">1.8.</span> <span class="nav-text">关闭自动保存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%B3%A8%E9%87%8A%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.9.</span> <span class="nav-text">代码注释模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Prettier"><span class="nav-number">1.10.</span> <span class="nav-text">使用 Prettier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E5%8F%8C%E5%87%BB-shift-%E6%90%9C%E7%B4%A2"><span class="nav-number">1.11.</span> <span class="nav-text">关闭双击 shift 搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E6%8F%90%E7%A4%BA%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="nav-number">1.12.</span> <span class="nav-text">关闭提示区分大小写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%B3%A8%E9%87%8A%E7%9A%84%E7%94%A8%E6%88%B7%E5%90%8D"><span class="nav-number">1.13.</span> <span class="nav-text">修改注释的用户名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">1.14.</span> <span class="nav-text">代码格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3-HTML-body-%E4%B8%8B%E7%9A%84%E6%A0%87%E7%AD%BE%E6%97%A0%E7%BC%A9%E8%BF%9B"><span class="nav-number">1.14.1.</span> <span class="nav-text">解决 HTML body 下的标签无缩进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-%E5%AD%90%E6%9F%A5%E8%AF%A2%E5%8F%B3%E6%8B%AC%E5%8F%B7%E5%8F%A6%E8%B5%B7%E4%B8%80%E8%A1%8C"><span class="nav-number">1.14.2.</span> <span class="nav-text">SQL 子查询右括号另起一行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%A1%8C%E6%B3%A8%E9%87%8A%E6%8C%A8%E7%9D%80%E4%BB%A3%E7%A0%81%E8%80%8C%E4%B8%8D%E6%98%AF%E5%9C%A8%E8%A1%8C%E9%A6%96"><span class="nav-number">1.14.3.</span> <span class="nav-text">单行注释挨着代码而不是在行首</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90-serialVersionUID"><span class="nav-number">1.15.</span> <span class="nav-text">生成 serialVersionUID</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">代码运行配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#log4j2-%E5%BD%A9%E8%89%B2%E6%97%A5%E5%BF%97"><span class="nav-number">3.1.</span> <span class="nav-text">log4j2 彩色日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BD%A9%E8%89%B2%E6%97%A5%E5%BF%97"><span class="nav-number">3.2.</span> <span class="nav-text">SpringBoot 单元测试彩色日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jansi-%E5%BD%A9%E8%89%B2%E8%BE%93%E5%87%BA"><span class="nav-number">3.3.</span> <span class="nav-text">Jansi 彩色输出</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">😳</p>
+  <div class="site-description" itemprop="description">Whatever It Takes!</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://unpkg.com/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="😳">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Knowledge">
+      <meta itemprop="description" content="Whatever It Takes!">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="IntelliJ IDEA 的个人配置 | Knowledge">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IntelliJ IDEA 的个人配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-17 21:12:19" itemprop="dateCreated datePublished" datetime="2021-03-17T21:12:19+08:00">2021-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-02 16:12:15" itemprop="dateModified" datetime="2025-03-02T16:12:15+08:00">2025-03-02</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote><p>功能强大，符合人体工程学的 JVM IDE</p>
+<footer><strong>JetBrains</strong><cite><a target="_blank" rel="noopener" href="https://www.jetbrains.com/zh-cn/idea/">IntelliJ IDEA：JetBrains</a></cite></footer></blockquote>
+
+<span id="more"></span>
+<br />
+
+<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><h2 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h2><h2 id="JavaFX"><a href="#JavaFX" class="headerlink" title="JavaFX"></a>JavaFX</h2><h2 id="关闭更新"><a href="#关闭更新" class="headerlink" title="关闭更新"></a>关闭更新</h2><h2 id="自动换行"><a href="#自动换行" class="headerlink" title="自动换行"></a>自动换行</h2><img src="/2021/03/17/my-configuration-for-intellij-idea/wrap-1.jpg" class="" title="自动换行1">
+
+<img src="/2021/03/17/my-configuration-for-intellij-idea/wrap-2.jpg" class="" title="自动换行2">
+
+<h2 id="文件编码"><a href="#文件编码" class="headerlink" title="文件编码"></a>文件编码</h2><h2 id="关闭自动保存"><a href="#关闭自动保存" class="headerlink" title="关闭自动保存"></a>关闭自动保存</h2><img src="/2021/03/17/my-configuration-for-intellij-idea/auto-save.jpg" class="" title="关闭自动保存">
+
+<img src="/2021/03/17/my-configuration-for-intellij-idea/star-mark.jpg" class="" title="星号标记">
+
+<h2 id="代码注释模板"><a href="#代码注释模板" class="headerlink" title="代码注释模板"></a>代码注释模板</h2><pre class="line-numbers language-none"><code class="language-none">&#x2F;**
+ * @author &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;github.com&#x2F;alwilda&quot; target&#x3D;&quot;_blank&quot;&gt;Vondila&lt;a&#x2F;&gt;
+ *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用-Prettier"><a href="#使用-Prettier" class="headerlink" title="使用 Prettier"></a>使用 Prettier</h2><ol>
+<li><p>安装 <a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/10456-prettier/versions">Prettier</a> 插件。</p>
+</li>
+<li><img src="/2021/03/17/my-configuration-for-intellij-idea/prettier.jpg" class="" title="Prettier"></li>
+</ol>
+<h2 id="关闭双击-shift-搜索"><a href="#关闭双击-shift-搜索" class="headerlink" title="关闭双击 shift 搜索"></a>关闭双击 shift 搜索</h2><p><del>按 <code>Crrl+Shift+A</code>，输入 <code>Registry</code>,找到 <code>ide.suppress.double.click.handler</code> 后把 ✔ 打上即可</del></p>
+<p>在 <strong>2021.2.1</strong> 或之前的几个版本更新后，上面的方法已经不再适用，现在这个设置已经换到了，讷 👇</p>
+<img src="/2021/03/17/my-configuration-for-intellij-idea/disable-double.jpg" class="" title="关闭双击功能">
+
+<h2 id="关闭提示区分大小写"><a href="#关闭提示区分大小写" class="headerlink" title="关闭提示区分大小写"></a>关闭提示区分大小写</h2><p><code>File</code> | <code>Settings</code> | <code>Edito</code> | <code>General</code> | <code>Code Completion</code> </p>
+<p>取消勾选 Match case</p>
+<h2 id="修改注释的用户名"><a href="#修改注释的用户名" class="headerlink" title="修改注释的用户名"></a>修改注释的用户名</h2><p>修改 vmoptions 文件，添加 <code>-Duser.name=任何名字</code>，然后重启 IDEA。</p>
+<h2 id="代码格式化"><a href="#代码格式化" class="headerlink" title="代码格式化"></a>代码格式化</h2><h3 id="解决-HTML-body-下的标签无缩进"><a href="#解决-HTML-body-下的标签无缩进" class="headerlink" title="解决 HTML body 下的标签无缩进"></a>解决 HTML body 下的标签无缩进</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>HTML</code></p>
+<p>选择 <code>Other</code> 后，编辑 <code>Do not indent children of</code>（不缩进子集），然后去掉 <em>不想无缩进</em> 的标签就可以了。</p>
+<h3 id="SQL-子查询右括号另起一行"><a href="#SQL-子查询右括号另起一行" class="headerlink" title="SQL 子查询右括号另起一行"></a>SQL 子查询右括号另起一行</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>SQL</code> 选择具体的数据库或通用。</p>
+<p>选择 <code>Queries</code> 下拉找到 <code>Subquery</code> -&gt; <code>Place the closing parenthesis</code> 修改为 <code>To begin</code>。</p>
+<h3 id="单行注释挨着代码而不是在行首"><a href="#单行注释挨着代码而不是在行首" class="headerlink" title="单行注释挨着代码而不是在行首"></a>单行注释挨着代码而不是在行首</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>Java</code> | <code>Code Generation</code></p>
+<p>取消勾选 <code>Line comment at first column</code>.</p>
+<img src="/2021/03/17/my-configuration-for-intellij-idea/line-comment-not-first.png" class="" title="取消单行注释在行首">
+
+<h2 id="生成-serialVersionUID"><a href="#生成-serialVersionUID" class="headerlink" title="生成 serialVersionUID"></a>生成 serialVersionUID</h2><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Inspections</code>，或直接搜索 <code>serialVersionUID</code>。</p>
+<p>然后勾选 JVM languages 下的</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Serializable class without ‘serialVersionUID’</li>
+</ul>
+<h1 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/10080-rainbow-brackets">Rainbow Brackets</a></li>
+</ol>
+<h1 id="代码运行配置"><a href="#代码运行配置" class="headerlink" title="代码运行配置"></a>代码运行配置</h1><p>可以编辑配置模板 Application、 JUnit 或其它。</p>
+<h2 id="log4j2-彩色日志"><a href="#log4j2-彩色日志" class="headerlink" title="log4j2 彩色日志"></a>log4j2 彩色日志</h2><p>Add VM Options: <code>-Dlog4j.skipJansi=false</code></p>
+<h2 id="SpringBoot-单元测试彩色日志"><a href="#SpringBoot-单元测试彩色日志" class="headerlink" title="SpringBoot 单元测试彩色日志"></a>SpringBoot 单元测试彩色日志</h2><p>Add VM Options: <code>-Dspring.output.ansi.enabled=ALWAYS</code></p>
+<h2 id="Jansi-彩色输出"><a href="#Jansi-彩色输出" class="headerlink" title="Jansi 彩色输出"></a>Jansi 彩色输出</h2><p>Add VM Options: <code>-Djansi.passthrough=true</code></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>请我一杯咖啡吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="😳 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="😳 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>😳
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/" title="IntelliJ IDEA 的个人配置">https://alwilda.github.io/2021/03/17/my-configuration-for-intellij-idea/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/IntelliJ-IDEA/" rel="tag"># IntelliJ IDEA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/16/using-jackson-java-json-library/" rel="prev" title="Java JSON library - Jackson 的使用">
+                  <i class="fa fa-angle-left"></i> Java JSON library - Jackson 的使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/21/get-the-product-key-of-local-windows10/" rel="next" title="获取本机win10的产品密钥">
+                  获取本机win10的产品密钥 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">😳</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/alwilda" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://unpkg.com/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

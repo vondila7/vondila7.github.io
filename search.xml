@@ -1,0 +1,1979 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>A New Beginning</title>
+    <url>/2021/02/21/a-new-beginning/</url>
+    <content><![CDATA[<p>A New Beginning</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>在 Windows 下使用命令行计算文件校验值</title>
+    <url>/2023/01/01/calculating-file-checksums-using-the-command-on-windows/</url>
+    <content><![CDATA[<p>在 Windows 中可以使用命令 <code>certutil</code> 来计算文件的校验值。</p>
+<span id="more"></span>
+
+<div style="width:65%;">
+<img src="/2023/01/01/calculating-file-checksums-using-the-command-on-windows/command.png" class="">
+</div>
+
+<p>通过 <code>certutil -hashfile -?</code> 可以知道它支持的哈希算法有: MD2 MD4 MD5 SHA1 SHA256 SHA384 SHA512</p>
+<p>那么要计算一个文件的 SHA256 值则可以使用：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> D:<span class="token punctuation">\</span>xxx<span class="token punctuation">\</span>xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者相对路径：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">certutil <span class="token parameter variable">-hashfile</span> xxx.txt SHA256<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>常用 cmd 命令</title>
+    <url>/2023/05/01/commonly-used-cmd-commands/</url>
+    <content><![CDATA[<ul>
+<li>查询端口号</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">netstat -ano|findstr 8080 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ul>
+<li>查询进程</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">tasklist|findstr 进程ID
+taskkill &#x2F;pid 进程ID-t -f<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>MySQL 字符集</title>
+    <url>/2022/11/05/about-mysql-character-sets/</url>
+    <content><![CDATA[<p>utf-8 编码可能 2 个字节、3 个字节、4 个字节的字符，但是 MySQL 的 utf8 编码只支持 3 字节的数据，而 utf8mb4 编码是 utf8 编码的超集，兼容 utf8，并且能存储 4 字节的表情字符。</p>
+<span id="more"></span>
+
+<h1 id="使用-uft8mb4"><a href="#使用-uft8mb4" class="headerlink" title="使用 uft8mb4"></a>使用 uft8mb4</h1><p>查看当前字符集：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">SHOW VARIABLES WHERE Variable_name LIKE <span class="token string">'character_set_%'</span> OR Variable_name LIKE <span class="token string">'collation%'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<div style="width: 32rem;">
+<img src="/2022/11/05/about-mysql-character-sets/mysql_default_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<p>修改配置文件，一般名称为 <code>my.ini</code>，加入以下配置：</p>
+<pre class="line-numbers language-none"><code class="language-none">[client]
+default-character-set &#x3D; utf8mb4
+
+[mysql]
+default-character-set &#x3D; utf8mb4
+
+[mysqld]
+character-set-client-handshake &#x3D; FALSE
+character-set-server &#x3D; utf8mb4
+# ci 是 case insensitive, 即 &quot;大小写不敏感&quot;
+collation-server &#x3D; utf8mb4_general_ci
+init_connect&#x3D;&#39;SET NAMES utf8mb4&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改后重启 MySQL 服务，这时再查看发现默认字符集已经改变了。</p>
+<div style="width: 32rem;">
+<img src="/2022/11/05/about-mysql-character-sets/mysql_utf8mb4_charset.png" class="" title="MySQL 默认字符集">
+</div>
+
+<h1 id="建表语句"><a href="#建表语句" class="headerlink" title="建表语句"></a>建表语句</h1><pre class="line-numbers language-none"><code class="language-none">CREATE DATABASE IF NOT EXISTS test DEFAULT CHARSET utf8mb4 COLLATE utf8_general_ci;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>Yarn 1.x 常用命令</title>
+    <url>/2022/01/10/common-commands-for-yarn1/</url>
+    <content><![CDATA[<p>记录一些 <a href="https://classic.yarnpkg.com/">yarn</a> dependency management 常用的命令…..</p>
+<span id="more"></span>
+
+<h1 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h1><h2 id="yarn-add-lt-package…-gt-–dev-x2F-D"><a href="#yarn-add-lt-package…-gt-–dev-x2F-D" class="headerlink" title="yarn add &lt;package…&gt; [–dev&#x2F;-D]"></a>yarn add &lt;package…&gt; [–dev&#x2F;-D]</h2><p>使用 <code>--dev</code> 或者 <code>-D</code> 将依赖安装到 devDependencies（只在开发环境下生效）中。</p>
+<h1 id="删除依赖"><a href="#删除依赖" class="headerlink" title="删除依赖"></a>删除依赖</h1><p>运行 <code>yarn remove 包名</code> 将从你的直接依赖中删除名指定名称的包，在这个过程中会更新 package.json 和 yarn.lock 文件。</p>
+<h1 id="升级依赖"><a href="#升级依赖" class="headerlink" title="升级依赖"></a>升级依赖</h1><h2 id="yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern"><a href="#yarn-upgrade-package-package-tag-package-version-–scope-scope-…-–ignore-engines-–pattern" class="headerlink" title="yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]"></a>yarn upgrade [package | package@tag | package@version | –scope @scope]… [–ignore-engines] [–pattern]</h2><p>该命令根据 package.json 文件中指定的版本范围，将依赖关系更新为最新版本。yarn.lock文件也将被重新创建。</p>
+<p>可以选择指定一个或多个软件包的名称。当指定了包的名字时，只有这些包会被升级。当没有指定包的名字时，所有的依赖将被升级。</p>
+<p><code>[package]</code> : 当指定的包只是一个名字时，那么这个包的最新匹配版本将被升级到。</p>
+<p><code>[package@tag]</code> : 当指定的软件包包含一个标签时，指定的标签将被升级到。标签名称是由项目维护者选择的，通常你使用这个命令来安装一个正在开发的软件包的实验性或长期支持版本。你选择的标签将是出现在 package.json 文件中的版本。</p>
+<p><code>[package@version]</code> : 当一个指定的软件包包含一个版本时，那么指定的版本将被升级到。package.json的依赖关系参考也将被改变，以匹配这个指定的版本。你可以使用任何SemVer版本号或范围。</p>
+<p><code>--ignore-engines</code> : 这个标志可以用来跳过引擎检查。</p>
+<h2 id="yarn-upgrade-interactive-–latest-显示一个选择列表"><a href="#yarn-upgrade-interactive-–latest-显示一个选择列表" class="headerlink" title="yarn upgrade-interactive [–latest] 显示一个选择列表"></a>yarn upgrade-interactive [–latest] 显示一个选择列表</h2><p>使用 <code>upgrade-interactive</code> 命令会在终端显示可升级的包列表，按 <code>&lt;空格&gt;</code> 选择，<code>&lt;a&gt;</code> 切换所有，<code>&lt;i&gt;</code>反转选择。</p>
+<p><code>--latest</code>: 这个标志告诉 yarn 忽略 package.json 中指定的版本范围，而使用注册表中标记的最新版本。</p>
+<h1 id="查看依赖"><a href="#查看依赖" class="headerlink" title="查看依赖"></a>查看依赖</h1><h2 id="yarn-list"><a href="#yarn-list" class="headerlink" title="yarn list"></a>yarn list</h2><p>list 命令通过引用所有包管理器的元数据文件，包括项目的依赖关系，列出当前工作目录下的所有依赖关系。</p>
+<h2 id="yarn-list-–depth-–pattern"><a href="#yarn-list-–depth-–pattern" class="headerlink" title="yarn list [–depth] [–pattern]"></a>yarn list [–depth] [–pattern]</h2><p>默认情况下，所有软件包和它们的依赖关系将被显示出来。要限制依赖关系的深度，你可以在 list 命令中加入一个标志 <code>--深度</code>，以及想要的级别。例如：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="管理全局环境下的包"><a href="#管理全局环境下的包" class="headerlink" title="管理全局环境下的包"></a>管理全局环境下的包</h1><p>以上的命令只针对具体的一个工程，如果要管理全局环境下的包，则需要使用 <code>yarn global</code>。</p>
+<p><code>yarn global</code> 是一个前缀，用于一些命令，如 <code>add</code>、<code>list</code> 和 <code>remove</code>。除了使用一个全局目录来存储软件包外，它们的行为与普通版本完全一样。</p>
+<p>例如： </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> global <span class="token function">add</span>
+<span class="token function">yarn</span> global list <span class="token parameter variable">--depth</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token function">yarn</span> global upgrade-interactive<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<div class="note danger no-icon"><p>注意：与 npm 中的 –global 标志不同，global 是一个必须紧跟 yarn 的命令。输入 yarn add global package-name 将在本地添加名为 global 和 package-name 的软件包，而不是在全局添加 package-name。</p>
+</div>]]></content>
+  </entry>
+  <entry>
+    <title>Apache Shiro 默认过滤器</title>
+    <url>/2021/04/18/apache-shiro-default-filters/</url>
+    <content><![CDATA[<p>自动可用的默认过滤器实例由 <a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/mgt/DefaultFilter.html"><code>DefaultFilter enum</code></a> 定义，并且枚举名称字段是可用于配置的名称。 它们是：</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th>Filter Name</th>
+<th>Class</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>anon</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/AnonymousFilter.html">org.apache.shiro.web.filter.authc.AnonymousFilter</a></td>
+</tr>
+<tr>
+<td><code>authc</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/FormAuthenticationFilter.html">org.apache.shiro.web.filter.authc.FormAuthenticationFilter</a></td>
+</tr>
+<tr>
+<td><code>authcBasic</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/BasicHttpAuthenticationFilter.html">org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter</a></td>
+</tr>
+<tr>
+<td><code>authcBearer</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/BearerHttpAuthenticationFilter.html">org.apache.shiro.web.filter.authc.BearerHttpAuthenticationFilter</a></td>
+</tr>
+<tr>
+<td><code>invalidRequest</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/InvalidRequestFilter.html">org.apache.shiro.web.filter.InvalidRequestFilter</a></td>
+</tr>
+<tr>
+<td><code>logout</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/LogoutFilter.html">org.apache.shiro.web.filter.authc.LogoutFilter</a></td>
+</tr>
+<tr>
+<td><code>noSessionCreation</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/session/NoSessionCreationFilter.html">org.apache.shiro.web.filter.session.NoSessionCreationFilter</a></td>
+</tr>
+<tr>
+<td><code>perms</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/PermissionsAuthorizationFilter.html">org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter</a></td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/PortFilter.html">org.apache.shiro.web.filter.authz.PortFilter</a></td>
+</tr>
+<tr>
+<td><code>rest</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/HttpMethodPermissionFilter.html">org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter</a></td>
+</tr>
+<tr>
+<td><code>roles</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/RolesAuthorizationFilter.html">org.apache.shiro.web.filter.authz.RolesAuthorizationFilter</a></td>
+</tr>
+<tr>
+<td><code>ssl</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authz/SslFilter.html">org.apache.shiro.web.filter.authz.SslFilter</a></td>
+</tr>
+<tr>
+<td><code>user</code></td>
+<td><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/web/filter/authc/UserFilter.html">org.apache.shiro.web.filter.authc.UserFilter</a></td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>Apache Shiro</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 refs 调用组件</title>
+    <url>/2022/05/29/calling-react-components-with-refs/</url>
+    <content><![CDATA[<p>话不多说，先上代码</p>
+<span id="more"></span>
+
+<h1 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h1><pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">type</span> <span class="token class-name">ModalStates</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  visible<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyClassModal</span> <span class="token keyword">extends</span> <span class="token class-name">React</span><span class="token punctuation">.</span>Component<span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token punctuation">,</span> ModalStates<span class="token operator">></span> <span class="token punctuation">&#123;</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span>props<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>state <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+      visible<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>openModal <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">openModal</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>closeModal <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">closeModal</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">openModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> visible<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">closeModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> visible<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> visible <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>state<span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Modal</span></span>
+          <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>My Class Modal<span class="token punctuation">"</span></span>
+          <span class="token attr-name">visible</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>visible<span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">onOk</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>closeModal<span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">onCancel</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>closeModal<span class="token punctuation">&#125;</span></span>
+        <span class="token punctuation">></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token plain-text">Class Component</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Modal</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">></span></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyClassApp</span> <span class="token keyword">extends</span> <span class="token class-name">React</span><span class="token punctuation">.</span>Component<span class="token operator">&lt;</span><span class="token builtin">any</span><span class="token punctuation">,</span> <span class="token builtin">any</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+  modal<span class="token operator">:</span> RefObject<span class="token operator">&lt;</span>MyClassModal<span class="token operator">></span><span class="token punctuation">;</span>
+
+  <span class="token function">constructor</span><span class="token punctuation">(</span>props<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>props<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">.</span>modal <span class="token operator">=</span> React<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">createRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyClassModal<span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>openModal <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">openModal</span><span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">openModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>modal<span class="token punctuation">.</span>current<span class="token operator">?.</span><span class="token function">openModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>modal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Button</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>primary<span class="token punctuation">"</span></span> <span class="token attr-name">onClick</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>openModal<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+          Open Class Modal
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Button</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MyClassModal</span></span> <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token keyword">this</span><span class="token punctuation">.</span>modal<span class="token punctuation">&#125;</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h1><pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">const</span> MyFunctionModal <span class="token operator">=</span> React<span class="token punctuation">.</span><span class="token generic-function"><span class="token function">forwardRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyFunctionModalRefs<span class="token punctuation">,</span> <span class="token builtin">any</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">(</span>props<span class="token punctuation">,</span> ref<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>visible<span class="token punctuation">,</span> setVisible<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useImperativeHandle</span><span class="token punctuation">(</span>ref<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">&#123;</span> openModal <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">openModal</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setVisible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">closeModal</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setVisible</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Modal</span></span> <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>My Function Modal<span class="token punctuation">"</span></span> <span class="token attr-name">visible</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>visible<span class="token punctuation">&#125;</span></span> <span class="token attr-name">onOk</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>closeModal<span class="token punctuation">&#125;</span></span> <span class="token attr-name">onCancel</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>closeModal<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token plain-text">Function Component</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Modal</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> MyFunctioncApp<span class="token operator">:</span> React<span class="token punctuation">.</span><span class="token function-variable function">FC</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> ref <span class="token operator">=</span> <span class="token generic-function"><span class="token function">createRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>MyFunctionModalRefs<span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">openModal</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>ref<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ref<span class="token punctuation">.</span>current<span class="token operator">?.</span><span class="token function">openModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Button</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>primary<span class="token punctuation">"</span></span> <span class="token attr-name">onClick</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>openModal<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        Open Function Modal
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Button</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MyFunctionModal</span></span> <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>ref<span class="token punctuation">&#125;</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>Node.js 包管理器配置包缓存位置</title>
+    <url>/2023/02/05/configure-node-js-package-cache-location/</url>
+    <content><![CDATA[<h1 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h1><h2 id="查看配置"><a href="#查看配置" class="headerlink" title="查看配置"></a>查看配置</h2><ul>
+<li><code>npm config ls or npm config list</code> 所有配置。</li>
+<li><code>npm config list -l</code> 获取某配置。</li>
+<li><code>npm config get xxx</code></li>
+</ul>
+<span id="more"></span>
+
+<h2 id="配置全局安装和缓存路径"><a href="#配置全局安装和缓存路径" class="headerlink" title="配置全局安装和缓存路径"></a>配置全局安装和缓存路径</h2><ul>
+<li><code>npm config set prefix xxxpath</code></li>
+<li><code>npm config set cache xxxpath</code></li>
+</ul>
+<blockquote>
+<p>Windows 下要将全局路径添加到环境变量 PATH 中，方可使用依赖的独有命令。</p>
+</blockquote>
+<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><p>查看全局包：<code>npm list -g --depth 0</code></p>
+<p>卸载包：<code>npm uninstall</code></p>
+<h1 id="Yarn"><a href="#Yarn" class="headerlink" title="Yarn"></a>Yarn</h1><p>使用 <code>yarn config list</code> 查看所有已配置的信息。</p>
+<p>设置 <code>cache-folder</code> 来配置缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set cache-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者 通过环境变量 <code>YARN_CACHE_FOLDER</code> 指定缓存目录。</p>
+<pre class="line-numbers language-none"><code class="language-none">YARN_CACHE_FOLDER&#x3D;&lt;path&gt; yarn &lt;command&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>运行 <code>yarn cache dir</code> 会打印出当前的 yarn 全局缓存在哪里。</p>
+<h2 id="改变-yarn-全局安装路径"><a href="#改变-yarn-全局安装路径" class="headerlink" title="改变 yarn 全局安装路径"></a>改变 yarn 全局安装路径</h2><p>设置安装位置</p>
+<pre class="line-numbers language-none"><code class="language-none">yarn config set global-folder &lt;path&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>yarn global bin</code> 将输出 <code>Yarn</code> 为您已安装的可执行文件之符号链接准备的位置。 您可以使用 <code>yarn config set prefix &lt;filepath&gt;</code> 配置此基本位置。</p>
+<p><code>yarn global dir</code> 将打印存放全局node_modules的全局安装文件夹。</p>
+<p>例如：以设置 <code>D:\Yarn\Global</code> 为全局安装目录为例，则：</p>
+<ul>
+<li><code>yarn config set global-folder D:\Yarn\Global</code></li>
+<li><code>yarn config set prefix  D:\Yarn\Global</code></li>
+</ul>
+<blockquote>
+<p>全局安装依赖时会将其命令脚本放到 D:\Yarn\Global\bin下，所以要将D:\Yarn\Global\bin 配置到环境变量 PATH 中。</p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>Git 删除提交记录</title>
+    <url>/2022/04/30/delete-git-commit-history/</url>
+    <content><![CDATA[<ol>
+<li>使用 git log 查找到要删除提交记录的上一条提交的 commit 的 id</li>
+</ol>
+<span id="more"></span>
+
+<ol start="2">
+<li><p>执行 git rebase -i commit-id</p>
+</li>
+<li><p>vim普通模式下，光标移到要删的那一行，执行 dd，删除所在行（按 i 进入编辑模式，把需要删除的记录的 pick 改为 drop，然后按 esc 退出 :wq 保存</p>
+</li>
+<li><p>再次查看git log，可以看到记录已经没有了</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Create React App 项目部署到二级目录</title>
+    <url>/2022/04/23/deploying-a-create-react-app-project-to-a-subdirectory/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Maven 历史版本下载</title>
+    <url>/2022/04/12/download-historical-versions-of-maven/</url>
+    <content><![CDATA[<p><a href="https://archive.apache.org/dist/maven/maven-3/">https://archive.apache.org/dist/maven/maven-3/</a></p>
+<span id="more"></span>]]></content>
+  </entry>
+  <entry>
+    <title>在 VSCode 中配置 Java 开发环境</title>
+    <url>/2025/02/21/configure-java-development-environment-in-vscode/</url>
+    <content><![CDATA[<p>首先安装 <a href="https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack">Extension Pack for Java</a> 插件。</p>
+<span id="more"></span>
+
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>将 Java 安装路径和 Maven settings.xml 替换为实际路径即可。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"java.jdt.ls.java.home"</span><span class="token operator">:</span> <span class="token string">"C:\\xxx\\java21"</span><span class="token punctuation">,</span>
+    <span class="token property">"java.maven.downloadSources"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"java.configuration.maven.userSettings"</span><span class="token operator">:</span> <span class="token string">"D:\\xxx\\apache-maven-3.9.9\\conf\\settings.xml"</span><span class="token punctuation">,</span>
+    <span class="token property">"java.configuration.maven.globalSettings"</span><span class="token operator">:</span> <span class="token string">"D:\\xxx\\apache-maven-3.9.9\\conf\\settings.xml"</span><span class="token punctuation">,</span>
+    <span class="token property">"maven.settingsFile"</span><span class="token operator">:</span> <span class="token string">"D:\\xxx\\apache-maven-3.9.9\\conf\\settings.xml"</span><span class="token punctuation">,</span>
+    <span class="token property">"maven.terminal.useJavaHome"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="开发体验配置"><a href="#开发体验配置" class="headerlink" title="开发体验配置"></a>开发体验配置</h1><h2 id="提示忽略大小写"><a href="#提示忽略大小写" class="headerlink" title="提示忽略大小写"></a>提示忽略大小写</h2><pre class="line-numbers language-none"><code class="language-none">vscode:&#x2F;&#x2F;settings&#x2F;java.completion.matchCase<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>Linux 下编译安装 Redis</title>
+    <url>/2023/05/14/compile-and-install-redis-on-linux/</url>
+    <content><![CDATA[<p>首先进入官网 <a href="https://redis.io/download/">Download | Redis</a> 下载安装包。</p>
+<span id="more"></span>
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ol>
+<li>解压安装包</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">tar</span> <span class="token parameter variable">-zxvf</span> redis-7.0.11.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>预编译</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> redis-7.0.11
+<span class="token function">make</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ol start="3">
+<li>安装</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装到 /usr/local/redis 目录</span>
+<span class="token function">make</span> <span class="token function">install</span> <span class="token assign-left variable">prefix</span><span class="token operator">=</span>/usr/local/redis/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="加入系统服务"><a href="#加入系统服务" class="headerlink" title="加入系统服务"></a>加入系统服务</h1><ol>
+<li><code>vim /etc/systemd/system/redis.service</code></li>
+<li>写入以下内容：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">[Unit]
+Description&#x3D;redis-server
+After&#x3D;network.target
+
+[Service]
+Type&#x3D;forking
+ExecStart&#x3D; &#x2F;usr&#x2F;local&#x2F;redis&#x2F;bin&#x2F;redis-server &#x2F;usr&#x2F;local&#x2F;redis&#x2F;bin&#x2F;redis.conf
+PrivateTmp&#x3D;true
+
+[Install]
+WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ol start="2">
+<li><p>重载系统服务：<code>systemctl daemon-reload</code></p>
+</li>
+<li><p>服务命令：</p>
+<ul>
+<li>关闭 redis-server：<code>systemctl stop redis.service</code></li>
+<li>开启 redsi-server：<code>systemctl start redis.service</code></li>
+<li>查看 redis-server 状态：<code>systemctl status redis.service</code></li>
+</ul>
+</li>
+<li><p>开机自启</p>
+</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl <span class="token builtin class-name">enable</span> redis.service <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>删除 Windows Defender 历史保护记录</title>
+    <url>/2021/10/10/delete-the-history-protection-records-of-windows-defender/</url>
+    <content><![CDATA[<p>删除 <strong>DetectionHistory</strong> 目录下的所有文件夹和文件： 👇</p>
+<span id="more"></span>
+
+<p>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory</p>
+<p><del>C:\ProgramData\Microsoft\Windows Defender\Scans\History\Results</del></p>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 Vue 动态控制 Element-UI 的 DatePicker 选择范围</title>
+    <url>/2021/06/05/dynamically-control-element-ui-datepicker-selection-range-using-vue/</url>
+    <content><![CDATA[<p>绝大多数情况下我们需要对可选择的日期时间加以范围的控制，而 <a href="https://element.eleme.cn/#/zh-CN"><code>Element-UI</code></a> 也提供了 <code>Picker Options</code> 属性来进行配置。</p>
+<span id="more"></span>
+
+<h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>Picker Options</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>类型</th>
+<th>可选值</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>disabledDate</td>
+<td>设置禁用状态，参数为当前日期，要求返回 Boolean</td>
+<td>Function</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h1 id="初探-disabledDate"><a href="#初探-disabledDate" class="headerlink" title="初探 disabledDate"></a>初探 <code>disabledDate</code></h1><p>首先，先构造两个普通的 <code>DatePicker</code> ：</p>
+<div style="width:70%;">
+<img src="/2021/06/05/dynamically-control-element-ui-datepicker-selection-range-using-vue/code-1.png" class="" title="构造两个普通DatePicker的代码">
+</div>
+
+<p>属性 <code>picker-options</code> 是一个对象，而 <code>disabledDate</code> 又是 <code>picker-options</code> 的一个属性，其值是一个 <code>Function</code>，接收一个参数 —— 当前选择的日期。</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>el-date-picker</span>
+  <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date1<span class="token punctuation">"</span></span>
+  <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
+  <span class="token attr-name">:picker-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pickerOptions1<span class="token punctuation">"</span></span>
+  <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>选择日期 - 1<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>el-date-picker</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">pickerOptions1</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token function-variable function">disabledDate</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">now</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> now <span class="token operator">></span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如上面的代码，参数 <code>now</code> 代表要选择的日期，<code>return now &gt; new Date();</code> 就表示不能选择大于今天的日期，因为选择大于今天就返回 <code>true</code>，而<code>true</code> 就表示被禁用。</p>
+<h1 id="动态配置可选范围"><a href="#动态配置可选范围" class="headerlink" title="动态配置可选范围"></a>动态配置可选范围</h1><p>使用 <a href="https://v3.cn.vuejs.org/guide/computed.html"><strong>计算属性</strong></a></p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>el-date-picker</span>
+  <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date2<span class="token punctuation">"</span></span>
+  <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>date<span class="token punctuation">"</span></span>
+  <span class="token attr-name">:picker-options</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pickerOptions2<span class="token punctuation">"</span></span>
+  <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>选择日期 - 2<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>el-date-picker</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">computed</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token function-variable function">pickerOptions2</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 使用箭头函数是因为其不绑定 this ，否则使用 date1 那 this 就在当前 Function 的作用域</span>
+        <span class="token function-variable function">disabledDate</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">now</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+          <span class="token keyword">return</span> now <span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>date1<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+]]></content>
+      <tags>
+        <tag>Vue</tag>
+        <tag>Element UI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VSCode 在代码片段中没有提示</title>
+    <url>/2021/05/31/fix-vscode-no-suggestions-in-code-snippets/</url>
+    <content><![CDATA[<p>默认情况下，在代码片段中（处于光标聚焦状态）是没有提示的。比如:</p>
+<span id="more"></span>
+
+<div style="width:90%;">
+<video width='100%' src="no.mp4" controls></video>
+</div>
+
+<p>要想在这种情况下有代码提示的话，就得将 <code>Snippets Prevent Quick Suggestions</code> 关闭，如下：</p>
+<div style="width:90%;">
+<img src="/2021/05/31/fix-vscode-no-suggestions-in-code-snippets/suggestions.jpg" class="" title="Prevent-Quick-Suggestions">
+</div>
+
+<p>这样的话，在使用的代码片段时，也会有提示。</p>
+<div style="width:90%;">
+<video width='100%' src="yes.mp4" controls></video>
+</div>
+]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Fetch 无法获取响应头</title>
+    <url>/2021/09/23/fetch-unable-to-get-response-headers/</url>
+    <content><![CDATA[<p>请求响应后，打印 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Response/headers"><code>Response.headers</code></a> 却输出了空对象。</p>
+<span id="more"></span>
+
+<p>经过笔者数分钟的探索，发现产生这种情况，应该是请求处于<strong>跨域</strong>之中，于此则要在 <code>fetch()</code> 中配置 <code>mode</code> 属性：</p>
+<p>mode: 请求的模式，如 cors、 no-cors 或者 same-origin。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span><span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">mode</span><span class="token operator">:</span> <span class="token string">'cors'</span><span class="token punctuation">,</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>至于 <code>Response.headers</code> 中的请求头信息不全，则要在服务端配置 <code>Access-Control-Expose-Headers</code>。</p>
+<blockquote><p>响应首部 <code>Access-Control-Expose-Headers</code> 列出了哪些首部可以作为响应的一部分暴露给外部。</p>
+<p>默认情况下，只有七种 simple response headers （简单响应首部）可以暴露给外部：</p>
+<ul>
+<li>Cache-Control</li>
+<li>Content-Language</li>
+<li>Content-Length</li>
+<li>Content-Type</li>
+<li>Expires</li>
+<li>Last-Modified</li>
+<li>Pragma</li>
+</ul>
+<p>如果想要让客户端可以访问到其他的首部信息，可以将它们在 <code>Access-Control-Expose-Headers</code> 里面列出来。</p>
+<footer><strong>@MDN</strong><cite><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">Access-Control-Expose-Headers - HTTP | MDN</a></cite></footer></blockquote>
+
+]]></content>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决 tomcat 控制台中文乱码</title>
+    <url>/2024/06/16/fix-tomcat-console-chinese-encoding-issue/</url>
+    <content><![CDATA[<p>编辑 <code>/conf/logging.properties</code>，将以下两个编码配置改为 <code>GBK</code>。</p>
+<pre class="line-numbers language-properties" data-language="properties"><code class="language-properties"><span class="token key attr-name">1catalina.org.apache.juli.AsyncFileHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span>
+<span class="token key attr-name">java.util.logging.ConsoleHandler.encoding</span> <span class="token punctuation">=</span> <span class="token value attr-value">GBK</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><small>同时适用于使用 IntelliJ IDEA 配置 Tomcat 启动项目后控制台乱码的情况。</small></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>修复 NVIDIA GPU 活动面板模糊的问题</title>
+    <url>/2022/01/14/fix-blurry-nvidia-gpu-control-panel/</url>
+    <content><![CDATA[<p>长久以来伴随着打开这玩意儿就显示模糊的问题的确是<del>让人荡气回肠，精彩纷呈，读来</del>令人茶饭不思，一病不起 😑。。。</p>
+<p>虽然也有一个相当凑合的方法——每次开机后再注销一次它就会显示清晰。但这也并不是长久之计，每次都注销也太烦了 😓。</p>
+<span id="more"></span>
+
+<p>长久以来的寻找解决办法，终于 🤦‍</p>
+<p>首先：回顾一下这模糊的样子（也许以后会怀念的 🧐） 👇</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/vague.png" class="" title="NVIDIA GPU 活动面板模糊的样子">
+</div>
+
+<p>现在进入这个软件的设置，可以通过资源管理器打开，右键点击属性即可 👇</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-1.png" class="" title="步骤-1">
+</div>
+
+<p>然后 👇，更改 <strong>所有用户</strong> 的 DPI 设置</p>
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/step-2.png" class="" title="步骤-2">
+
+<p>以后再开机：</p>
+<div style="width: 32rem;">
+<img src="/2022/01/14/fix-blurry-nvidia-gpu-control-panel/clear.png" class="">
+</div>
+
+<p>最后：</p>
+<blockquote>
+<p>猜想：这个方法应该也适用于其它软件模糊的情况。(⊙﹏⊙) 可能吧 ε&#x3D;ε&#x3D;ε&#x3D;┏(゜ロ゜;)┛ 😊</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>获取本机win10的产品密钥</title>
+    <url>/2021/03/21/get-the-product-key-of-local-windows10/</url>
+    <content><![CDATA[<p>如何查看本机 <code>win10</code> 的产品密钥呢？👇</p>
+<span id="more"></span>
+
+<ol>
+<li><p>按 <code>win + q</code> 或 <code>win + r</code>，搜索 <code>regedit</code> 进入注册表。</p>
+</li>
+<li><p>地址栏输入并进入该条目</p>
+<pre class="line-numbers language-none"><code class="language-none">计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtectionPlatform<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>进入 <code>SoftwareProtectionPlatform</code> 的详情页面后，打开 <code>BackupProductKeyDefault</code>，里面的数值数据就是激活密钥。</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 撤销上次的提交</title>
+    <url>/2022/04/30/git-undo-last-commit/</url>
+    <content><![CDATA[<p>这条命令就能撤回刚刚的提交。</p>
+<pre class="line-numbers language-none"><code class="language-none">git reset HEAD^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>更多的参数：</p>
+<span id="more"></span>
+<pre class="line-numbers language-none"><code class="language-none">git reset [--soft | --mixed | --hard] [-q] [&lt;commit&gt;]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>--mixed</code><br>不删除工作空间改动代码，撤销 commit，并且撤销git add . 操作<br>这个为默认参数，<code>git reset --mixed HEAD^</code> 和 <code>git reset HEAD^</code> 效果是一样的。</p>
+<p><code>--soft</code><br>不删除工作空间改动代码，撤销 commit，不撤销 git add .</p>
+<p><code>--hard</code><br>删除工作空间改动代码，撤销 commit，撤销 git add .</p>
+<div class="note warning"><p>注意！完成这个操作后，会删除工作空间代码！恢复到上一次的 commit 状态，慎重使用！</p>
+</div>
+
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>使用 MyBatis-Plus 更新字段为 null 值时报错</title>
+    <url>/2023/11/18/fixing-the-error-when-updating-fields-to-null-values-with-mybatis-plus/</url>
+    <content><![CDATA[<p>事情发生在使用 <strong>Oracle 数据库</strong> 时，通过 <code>UpdateWrapper</code> 更新一个字段为 null 时报了如下错误：</p>
+<pre class="line-numbers language-none"><code class="language-none">org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.type.TypeException: Could not set parameters for mapping: ParameterMapping&#123;property&#x3D;&#39;ew.paramNameValuePairs.MPGENVAL1&#39;, mode&#x3D;IN, javaType&#x3D;class java.lang.Object, jdbcType&#x3D;null, numericScale&#x3D;null, resultMapId&#x3D;&#39;null&#39;, jdbcTypeName&#x3D;&#39;null&#39;, expression&#x3D;&#39;null&#39;&#125;. Cause: org.apache.ibatis.type.TypeException: Error setting null for parameter #1 with JdbcType OTHER . Try setting a different JdbcType for this parameter or a different jdbcTypeForNull configuration property. Cause: java.sql.SQLException: 无效的列类型: 1111<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<span id="more"></span>
+
+<p>解决方法就是设置正确的 <code>jdbcTypeForNull</code> 值。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">mybatis-plus</span><span class="token punctuation">:</span>
+    <span class="token comment"># 必须使用引号包裹，不然就是 set(null) 而不是 set('NULL')</span>
+    <span class="token key atrule">jdbc-type-for-null</span><span class="token punctuation">:</span> <span class="token string">'null'</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>关于 <code>jdbcTypeForNull</code> 的官方描述：</p>
+<blockquote><table>
+<thead>
+<tr>
+<th>设置名</th>
+<th>描述</th>
+<th>有效值</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jdbcTypeForNull</td>
+<td>当没有为参数指定特定的 JDBC 类型时，空值的默认 JDBC 类型。 某些数据库驱动需要指定列的 JDBC 类型，多数情况直接用一般类型即可，比如 NULL、VARCHAR 或 OTHER。</td>
+<td>JdbcType 常量，常用值：NULL、VARCHAR 或 OTHER。</td>
+<td>OTHER</td>
+</tr>
+</tbody></table>
+<footer><strong>@MyBatis</strong><cite><a href="https://mybatis.org/mybatis-3/zh/configuration.html#设置（settings）">mybatis.org/mybatis-3/zh/configuration.html#设置（settings）</a></cite></footer></blockquote>
+
+<br />
+
+<p>这样便可以使用 <code>Wrapper</code> 去更新字段为 null 值。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Wrapper</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">StudentEntity</span><span class="token punctuation">></span></span> updateWrapper <span class="token operator">=</span> <span class="token class-name">Wrappers</span><span class="token punctuation">.</span><span class="token function">lambdaUpdate</span><span class="token punctuation">(</span><span class="token class-name">Student</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token class-name">StudentEntity</span><span class="token operator">::</span><span class="token function">getName</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">eq</span><span class="token punctuation">(</span><span class="token class-name">StudentEntity</span><span class="token operator">::</span><span class="token function">getId</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>如果想通过实体类去更新呢？<br>则可以通过配置 updateStrategy 为 <code>ALWAYS</code> 实现。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@TableField</span><span class="token punctuation">(</span>updateStrategy <span class="token operator">=</span> <span class="token class-name">FieldStrategy</span><span class="token punctuation">.</span><span class="token constant">ALWAYS</span><span class="token punctuation">)</span>
+<span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Student</span> student <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+student<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+student<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+studentService<span class="token punctuation">.</span><span class="token function">updateById</span><span class="token punctuation">(</span>student<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最后：在 <strong>MySQL</strong> 上测试，发现无需额外设置 <code>jdbcTypeForNull</code> 也可更新字段为 <code>null</code>，应该是……</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hexo 文章重命名后的路径访问问题</title>
+    <url>/2021/03/25/hexo-post-renaming-path-access-issue/</url>
+    <content><![CDATA[<p>修改了文章文件名的大小写后，发现其部署到 <code>GitHub</code> 后并没有变化。。。</p>
+<span id="more"></span>
+
+<p>删除 <code>.deploy_git</code></p>
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Getting Started with JavaFX 11+</title>
+    <url>/2021/03/05/getting-started-with-javafx-11-plus/</url>
+    <content><![CDATA[<p>JavaFX 允许您使用高度可移植的，现代化的，硬件加速的用户界面来创建 Java 应用程序。</p>
+<span id="more"></span>
+
+<h1 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h1><p><code>JavaFX</code> 建立在 <code>JDK</code> 之上，并且是一个独立的组件。有两种不同的选项可用于开发 <code>JavaFX</code> 应用程序：</p>
+<ol>
+<li>使用 <code>JavaFX SDK</code>（在 Java 11 LTS 和 15 进行选择）。</li>
+<li>使用构建系统（例如 Maven &#x2F; Gradle）从 Maven Central 下载所需的模块（在上述相同版本之间进行选择）。</li>
+</ol>
+<h2 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h2><p>至少 Java 11 的版本，<code>Oracle JDK</code> 或 <code>Open JDK</code>，点击下方链接选择下载。</p>
+<ol>
+<li><a href="https://www.oracle.com/cn/java/technologies/javase-downloads.html">Oracle JDK</a></li>
+<li><a href="https://adoptopenjdk.net/">Open JDK</a></li>
+</ol>
+<h2 id="JavaFX"><a href="#JavaFX" class="headerlink" title="JavaFX"></a>JavaFX</h2><p>访问 <a href="https://gluonhq.com/products/javafx/">JavaFX - Gluon</a> 选择合适的版本进行下载，建议 15.0.1，这与 <code>Scene Builder</code> 的版本一致。</p>
+<h2 id="Scene-Builder"><a href="#Scene-Builder" class="headerlink" title="Scene Builder"></a>Scene Builder</h2><blockquote>
+<p>Scene Builder 是面向设计的替代方案，可以提高生产率。</p>
+</blockquote>
+<p>访问 <a href="https://gluonhq.com/products/scene-builder/">Scene Builder - Gluon</a> 选择 15.0.1 版本下载安装。</p>
+<h1 id="在-IDEA-中使用"><a href="#在-IDEA-中使用" class="headerlink" title="在 IDEA 中使用"></a>在 IDEA 中使用</h1><ol>
+<li>新建项目时选择 <code>Java FX</code></li>
+</ol>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/new-javafx-project.jpg" class="" title="新建项目时选择JavaFX">
+
+<ol start="2">
+<li>添加 <code>Java FX</code> 依赖：</li>
+</ol>
+<p>选择 <code>File</code> -&gt; <code>Project Structure</code> -&gt; <code>Libraries</code> -&gt; <code>+</code> -&gt; <code>Java</code></p>
+<p>选择好目录后将其添加进项目。</p>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/add-javafx-lib.jpg" class="" title="添加依赖">
+
+<ol start="3">
+<li>设置如下 <code>VM options</code></li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">--module-path $&#123;PATH_TO_FX&#125; --add-modules javafx.controls,javafx.fxml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>PATH_TO_FX</code> 即为 JavaFX lib 的路径，这个变量可以配置在系统中也可以配置在<code>IDEA</code>上，亦或直接写上路径。</p>
+<p>配置如下图所示：</p>
+<ul>
+<li>VM options<br>点击 <code>Modify options</code> 勾选 <code>Add VM options</code></li>
+</ul>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/app-vm-opitons.jpg" class="" title="IDEA-JavaFX-VM-options">
+
+<ul>
+<li>在 IDEA 中配置 <code>PATH_TO_FX</code></li>
+</ul>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/javafx-path.jpg" class="" title="在IDEA中配置PATH_TO_FX">
+
+<ol start="4">
+<li>运行 <code>main</code> 函数，效果如图</li>
+</ol>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/n-run-r.jpg" class="" title="普通javafx项目效果">
+
+<h1 id="在-Maven-中使用"><a href="#在-Maven-中使用" class="headerlink" title="在 Maven 中使用"></a>在 Maven 中使用</h1><ol>
+<li>创建项目</li>
+</ol>
+<p>使用如下的 <code>Maven</code> 命令创建 <code>Java FX</code> 项目：</p>
+<pre class="line-numbers language-none"><code class="language-none">mvn archetype:generate \
+        -DarchetypeGroupId&#x3D;org.openjfx \
+        -DarchetypeArtifactId&#x3D;javafx-archetype-simple \
+        -DarchetypeVersion&#x3D;0.0.3 \
+        -DgroupId&#x3D;包名 \
+        -DartifactId&#x3D;项目名 \
+        -Dversion&#x3D;1.0.0 \
+        -Djavafx-version&#x3D;本地Java版本，如 11、12、。。。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>后续也可将 <code>archetype</code> 添加到 <code>IDEA</code> 中</p>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/idea-javafx-archetype.jpg" class="" title="javafx-archetype">
+
+<ol start="2">
+<li>项目结构</li>
+</ol>
+<p>注意框起来的部分，一定要与本地安装的 <code>Java</code> 版本保持一致。</p>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/m-j-structure.jpg" class="" title="项目结构">
+
+<ol start="3">
+<li>运行结果</li>
+</ol>
+<p>运行 <code>App.java</code> 的 <code>main</code> 函数，效果如图所示：</p>
+<img src="/2021/03/05/getting-started-with-javafx-11-plus/mvn-javafx-result.jpg" class="" title="效果">
+
+<h1 id="Scene-Builder-的使用"><a href="#Scene-Builder-的使用" class="headerlink" title="Scene Builder 的使用"></a>Scene Builder 的使用</h1><p><code>View</code> -&gt; <code>Show Sample Controller Skeleton</code></p>
+]]></content>
+      <categories>
+        <category>JavaFX</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>在 React 中初始化 ECharts</title>
+    <url>/2021/08/31/initializing-echarts-in-react/</url>
+    <content><![CDATA[<p>习惯了传统的 DOM 操作，在页面上使用 <a href="https://echarts.apache.org/zh/index.html">ECharts</a> 似乎感觉更方便，好比：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> myChart <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'main'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>但是在使用了 React 这种 <strong>声明式</strong>&#x2F;<strong>组件化</strong> 的 JavaScript 库之后，对于 DOM 的操作大大减少了，那么在 React 中该如何初始化一个 ECharts 对象呢？</p>
+<span id="more"></span>
+
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> echarts <span class="token keyword">from</span> <span class="token string">"echarts"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> option <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">Chart</span><span class="token punctuation">(</span>props<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">let</span> myChart <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useRef</span><span class="token generic class-name"><span class="token operator">&lt;</span>echarts<span class="token punctuation">.</span>EChartsType <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">renderChart</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>myChart<span class="token punctuation">.</span>current <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    myChart<span class="token punctuation">.</span>current<span class="token punctuation">.</span><span class="token function">setOption</span><span class="token punctuation">(</span>option<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">renderChart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+      <span class="token attr-name">ref</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">!==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          myChart<span class="token punctuation">.</span>current <span class="token operator">=</span> echarts<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">className</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>props<span class="token punctuation">.</span>className<span class="token punctuation">&#125;</span></span>
+    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>😶 上面是更好的方式吗 ❓</p>
+]]></content>
+      <tags>
+        <tag>React</tag>
+        <tag>ECharts</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java @SuppressWarnings</title>
+    <url>/2021/07/17/java-@suppresswarnings/</url>
+    <content><![CDATA[<blockquote><p>指示应在带注释的元素（以及带注释的元素中包含的所有程序元素）中抑制指定的编译器警告。</p>
+<footer><strong>Java Docs</strong><cite><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/SuppressWarnings.html">SuppressWarnings (Java Platform SE 8 )</a></cite></footer></blockquote>
+
+<span id="more"></span>
+
+<p />
+
+<p>这个注解是危险的，因为警告是代码中潜在的错误。因此，如果我们收到任何警告，首先应该是解决这些错误。但是如果我们要压制任何警告，我们必须有一些充分的理由，在每次使用时都应该注释上原因。</p>
+<p><code>@SuppressWarnings</code> 注解内可用的值如下：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>all</td>
+<td>抑制所有警告</td>
+</tr>
+<tr>
+<td>unchecked</td>
+<td>执行了未检查的类型转换时的警告</td>
+</tr>
+<tr>
+<td>unused</td>
+<td>未使用的变量</td>
+</tr>
+<tr>
+<td>deprecation</td>
+<td>使用已弃用的方法或类型</td>
+</tr>
+<tr>
+<td>divzero</td>
+<td>除以零警告</td>
+</tr>
+<tr>
+<td>serial</td>
+<td>可序列化的类上缺少 serialVersionUID</td>
+</tr>
+<tr>
+<td>fallthrough</td>
+<td>当 Switch 程序块直接通往下一种情况而没有 break 时的警告</td>
+</tr>
+<tr>
+<td>cast</td>
+<td>从泛型类型转换为非限定类型或其他方式时抑制警告</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>忽略带有空函数的语句的警告</td>
+</tr>
+<tr>
+<td>rawtypes</td>
+<td>没有传递带有泛型的参数</td>
+</tr>
+<tr>
+<td>try</td>
+<td>没有 catch 时的警告</td>
+</tr>
+<tr>
+<td>finally</td>
+<td>避免与不返回的 finally 块相关警</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaFX Runtime images (Java 11+)</title>
+    <url>/2021/03/09/javafx-runtime-images/</url>
+    <content><![CDATA[<p>JavaFX 项目的 <code>Runtime images</code> 是一个自定义 JRE，它仅包含应用程序所需的平台模块。</p>
+<p>本文仅针对通过 <code>Maven</code> 构建的项目.</p>
+<span id="more"></span>
+
+<h1 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h1><p>构建的成功与否几乎都取决于 <code>pom.xml</code> 中关于插件的配置，下面会针对这部分进行阐述。</p>
+<p><code>javafx-maven-plugin</code>有两个主要的命令 —— <code>javafx:run</code> 和 <code>javafx:jlink</code></p>
+<ul>
+<li><code>javafx:run</code> 进行编译和运行</li>
+<li><code>javafx:jlink</code> 创建自定义运行时</li>
+</ul>
+<h1 id="javafx-run-options"><a href="#javafx-run-options" class="headerlink" title="javafx:run options"></a>javafx:run options</h1><p>可能是原始的情况：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>build</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugins</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>release</span><span class="token punctuation">></span></span>11 or 12 13 14 15 ......<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>release</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugins</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>build</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>参考 <a href="https://github.com/openjfx/javafx-maven-plugin#javafxjlink-options">GitHub - openjfx&#x2F;javafx-maven-plugin: Maven plugin to run JavaFX 11+ applications</a> 来进行配置</p>
+<p>例如：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>stripDebug</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>stripDebug</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>compress</span><span class="token punctuation">></span></span>2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>compress</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noHeaderFiles</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noHeaderFiles</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>noManPages</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>noManPages</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>launcher</span><span class="token punctuation">></span></span>launcher<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>launcher</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkImageName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkImageName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jlinkZipName</span><span class="token punctuation">></span></span>app<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jlinkZipName</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mainClass</span><span class="token punctuation">></span></span>xxx.xxx.App<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mainClass</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="运行-javafx-run-的失败情况和解决办法"><a href="#运行-javafx-run-的失败情况和解决办法" class="headerlink" title="运行 javafx:run 的失败情况和解决办法"></a>运行 <code>javafx:run</code> 的失败情况和解决办法</h1><ul>
+<li><p><code>Failed to execute goal org.openjfx:javafx-maven-plugin:0.0.3:run (default-cli) on project hellofx: Error</code></p>
+<p><code>JAVA_HOME</code> 与项目需要的版本不一致，为了避免这种情况，可以将正确的版本添加到 <code>javafx-maven-plugin</code>:</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.openjfx<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>javafx-maven-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>0.0.3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>executable</span><span class="token punctuation">></span></span>xxx\jdk-xxx\bin\java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>executable</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaFX</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>设置 Git 区分文件名/目录名大小写</title>
+    <url>/2021/04/03/making-git-case-sensitive/</url>
+    <content><![CDATA[<p>如何设置 <code>Git</code> 区分大小写呢？</p>
+<span id="more"></span>
+
+<p>进入 <code>Git</code> 仓库执行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config core.ignorecase <span class="token boolean">false</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>MyBatis 支持的 JDBC 类型</title>
+    <url>/2021/03/16/jdbc-types-supported-by-mybatis/</url>
+    <content><![CDATA[<p>只需要在可能执行插入、更新和删除的且允许空值的列上指定 <code>JDBC</code> 类型，这是 <code>JDBC</code> 的要求而非 <code>MyBatis</code> 的要求。如果你直接面向 <code>JDBC</code> 编程，你需要对可以为空值的列指定这个类型。</p>
+<span id="more"></span>
+
+<p><strong><code>JDBC</code> 要求，如果一个列允许使用 <code>null</code> 值，并且会使用值为 <code>null</code> 的参数，就必须要指定 JDBC 类型（<code>jdbcType</code>）。</strong></p>
+<p>但大多时候，你只须简单指定属性名，顶多要为可能为空的列指定 <code>jdbcType</code>。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BIT</code></td>
+<td><code>FLOAT</code></td>
+<td><code>CHAR</code></td>
+<td><code>TIMESTAMP</code></td>
+<td><code>OTHER</code></td>
+<td><code>UNDEFINED</code></td>
+</tr>
+<tr>
+<td><code>TINYINT</code></td>
+<td><code>REAL</code></td>
+<td><code>VARCHAR</code></td>
+<td><code>BINARY</code></td>
+<td><code>BLOB</code></td>
+<td><code>NVARCHAR</code></td>
+</tr>
+<tr>
+<td><code>SMALLINT</code></td>
+<td><code>DOUBLE</code></td>
+<td><code>LONGVARCHAR</code></td>
+<td><code>VARBINARY</code></td>
+<td><code>CLOB</code></td>
+<td><code>NCHAR</code></td>
+</tr>
+<tr>
+<td><code>INTEGER</code></td>
+<td><code>NUMERIC</code></td>
+<td><code>DATE</code></td>
+<td><code>LONGVARBINARY</code></td>
+<td><code>BOOLEAN</code></td>
+<td><code>NCLOB</code></td>
+</tr>
+<tr>
+<td><code>BIGINT</code></td>
+<td><code>DECIMAL</code></td>
+<td><code>TIME</code></td>
+<td><code>NULL</code></td>
+<td><code>CURSOR</code></td>
+<td><code>ARRAY</code></td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MyBatis 的参数传递</title>
+    <url>/2021/03/22/parameter-passing-in-mybatis/</url>
+    <content><![CDATA[<p><a href="https://github.com/mybatis/mybatis-3/issues/549">Obtain formal parameter names using Java reflection · Issue #549 · mybatis&#x2F;mybatis-3</a></p>
+]]></content>
+      <tags>
+        <tag>MyBatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>让 VS Code 准确识别 maven 项目的 Java 版本</title>
+    <url>/2021/07/18/making-vscode-accurately-identify-the-java-version-of-maven-projects/</url>
+    <content><![CDATA[<p>有时 VS Code 并不能正确识别 maven 项目的 Java 版本 🤔，这时便需要对项目进行一些配置…</p>
+<span id="more"></span>
+
+<p>在 <code>pom.xml</code> 中通过 <a href="http://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html"><code>maven-compiler-plugin</code></a> 插件配置 <code>Java</code> 版本后让 VS Code 使用正确版本的 <code>JDK</code>。</p>
+<pre class="line-numbers language-markup" data-language="markup"><div class="caption"><span>pom.xml</span></div><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.maven.plugins<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>maven-compiler-plugin<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>3.8.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>source</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>source</span><span class="token punctuation">></span></span>
+		<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>target</span><span class="token punctuation">></span></span>11<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>target</span><span class="token punctuation">></span></span>
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 修改提交信息</title>
+    <url>/2022/04/30/modify-git-commit-message/</url>
+    <content><![CDATA[<ol>
+<li>输入如下命令进入变基， head 后的数字表示显示最近多少次的提交信息<pre class="line-numbers language-none"><code class="language-none">git rebase -i HEAD~2 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<span id="more"></span>
+
+<ol start="2">
+<li><p>输入 <strong><code>i</code></strong> 进入编辑模式</p>
+</li>
+<li><p>选择需要修改的那一行提交信息，将其前面的 <em>pick</em> 改为 <em>edit</em></p>
+</li>
+<li><p>输入 <strong><code>:wq</code></strong> 保存退出</p>
+</li>
+<li><p>修改提交记录</p>
+<pre class="line-numbers language-none"><code class="language-none">git commit --amend -m &#39;新的提交信息&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>退出 rebase 模式</p>
+<pre class="line-numbers language-none"><code class="language-none">git rebase --continue<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ol>
+<hr>
+<p> <code>git rebase --abort</code></p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>IntelliJ IDEA 的个人配置</title>
+    <url>/2021/03/17/my-configuration-for-intellij-idea/</url>
+    <content><![CDATA[<blockquote><p>功能强大，符合人体工程学的 JVM IDE</p>
+<footer><strong>JetBrains</strong><cite><a href="https://www.jetbrains.com/zh-cn/idea/">IntelliJ IDEA：JetBrains</a></cite></footer></blockquote>
+
+<span id="more"></span>
+<br />
+
+<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><h2 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h2><h2 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h2><h2 id="JavaFX"><a href="#JavaFX" class="headerlink" title="JavaFX"></a>JavaFX</h2><h2 id="关闭更新"><a href="#关闭更新" class="headerlink" title="关闭更新"></a>关闭更新</h2><h2 id="自动换行"><a href="#自动换行" class="headerlink" title="自动换行"></a>自动换行</h2><img src="/2021/03/17/my-configuration-for-intellij-idea/wrap-1.jpg" class="" title="自动换行1">
+
+<img src="/2021/03/17/my-configuration-for-intellij-idea/wrap-2.jpg" class="" title="自动换行2">
+
+<h2 id="文件编码"><a href="#文件编码" class="headerlink" title="文件编码"></a>文件编码</h2><h2 id="关闭自动保存"><a href="#关闭自动保存" class="headerlink" title="关闭自动保存"></a>关闭自动保存</h2><img src="/2021/03/17/my-configuration-for-intellij-idea/auto-save.jpg" class="" title="关闭自动保存">
+
+<img src="/2021/03/17/my-configuration-for-intellij-idea/star-mark.jpg" class="" title="星号标记">
+
+<h2 id="代码注释模板"><a href="#代码注释模板" class="headerlink" title="代码注释模板"></a>代码注释模板</h2><pre class="line-numbers language-none"><code class="language-none">&#x2F;**
+ * @author &lt;a href&#x3D;&quot;https:&#x2F;&#x2F;github.com&#x2F;alwilda&quot; target&#x3D;&quot;_blank&quot;&gt;Vondila&lt;a&#x2F;&gt;
+ *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="使用-Prettier"><a href="#使用-Prettier" class="headerlink" title="使用 Prettier"></a>使用 Prettier</h2><ol>
+<li><p>安装 <a href="https://plugins.jetbrains.com/plugin/10456-prettier/versions">Prettier</a> 插件。</p>
+</li>
+<li><img src="/2021/03/17/my-configuration-for-intellij-idea/prettier.jpg" class="" title="Prettier"></li>
+</ol>
+<h2 id="关闭双击-shift-搜索"><a href="#关闭双击-shift-搜索" class="headerlink" title="关闭双击 shift 搜索"></a>关闭双击 shift 搜索</h2><p><del>按 <code>Crrl+Shift+A</code>，输入 <code>Registry</code>,找到 <code>ide.suppress.double.click.handler</code> 后把 ✔ 打上即可</del></p>
+<p>在 <strong>2021.2.1</strong> 或之前的几个版本更新后，上面的方法已经不再适用，现在这个设置已经换到了，讷 👇</p>
+<img src="/2021/03/17/my-configuration-for-intellij-idea/disable-double.jpg" class="" title="关闭双击功能">
+
+<h2 id="关闭提示区分大小写"><a href="#关闭提示区分大小写" class="headerlink" title="关闭提示区分大小写"></a>关闭提示区分大小写</h2><p><code>File</code> | <code>Settings</code> | <code>Edito</code> | <code>General</code> | <code>Code Completion</code> </p>
+<p>取消勾选 Match case</p>
+<h2 id="修改注释的用户名"><a href="#修改注释的用户名" class="headerlink" title="修改注释的用户名"></a>修改注释的用户名</h2><p>修改 vmoptions 文件，添加 <code>-Duser.name=任何名字</code>，然后重启 IDEA。</p>
+<h2 id="代码格式化"><a href="#代码格式化" class="headerlink" title="代码格式化"></a>代码格式化</h2><h3 id="解决-HTML-body-下的标签无缩进"><a href="#解决-HTML-body-下的标签无缩进" class="headerlink" title="解决 HTML body 下的标签无缩进"></a>解决 HTML body 下的标签无缩进</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>HTML</code></p>
+<p>选择 <code>Other</code> 后，编辑 <code>Do not indent children of</code>（不缩进子集），然后去掉 <em>不想无缩进</em> 的标签就可以了。</p>
+<h3 id="SQL-子查询右括号另起一行"><a href="#SQL-子查询右括号另起一行" class="headerlink" title="SQL 子查询右括号另起一行"></a>SQL 子查询右括号另起一行</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>SQL</code> 选择具体的数据库或通用。</p>
+<p>选择 <code>Queries</code> 下拉找到 <code>Subquery</code> -&gt; <code>Place the closing parenthesis</code> 修改为 <code>To begin</code>。</p>
+<h3 id="单行注释挨着代码而不是在行首"><a href="#单行注释挨着代码而不是在行首" class="headerlink" title="单行注释挨着代码而不是在行首"></a>单行注释挨着代码而不是在行首</h3><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Code Style</code> | <code>Java</code> | <code>Code Generation</code></p>
+<p>取消勾选 <code>Line comment at first column</code>.</p>
+<img src="/2021/03/17/my-configuration-for-intellij-idea/line-comment-not-first.png" class="" title="取消单行注释在行首">
+
+<h2 id="生成-serialVersionUID"><a href="#生成-serialVersionUID" class="headerlink" title="生成 serialVersionUID"></a>生成 serialVersionUID</h2><p>设置路径：<code>File</code> | <code>Settings</code> | <code>Editor</code> | <code>Inspections</code>，或直接搜索 <code>serialVersionUID</code>。</p>
+<p>然后勾选 JVM languages 下的</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Serializable class without ‘serialVersionUID’</li>
+</ul>
+<h1 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h1><ol>
+<li><a href="https://plugins.jetbrains.com/plugin/10080-rainbow-brackets">Rainbow Brackets</a></li>
+</ol>
+<h1 id="代码运行配置"><a href="#代码运行配置" class="headerlink" title="代码运行配置"></a>代码运行配置</h1><p>可以编辑配置模板 Application、 JUnit 或其它。</p>
+<h2 id="log4j2-彩色日志"><a href="#log4j2-彩色日志" class="headerlink" title="log4j2 彩色日志"></a>log4j2 彩色日志</h2><p>Add VM Options: <code>-Dlog4j.skipJansi=false</code></p>
+<h2 id="SpringBoot-单元测试彩色日志"><a href="#SpringBoot-单元测试彩色日志" class="headerlink" title="SpringBoot 单元测试彩色日志"></a>SpringBoot 单元测试彩色日志</h2><p>Add VM Options: <code>-Dspring.output.ansi.enabled=ALWAYS</code></p>
+<h2 id="Jansi-彩色输出"><a href="#Jansi-彩色输出" class="headerlink" title="Jansi 彩色输出"></a>Jansi 彩色输出</h2><p>Add VM Options: <code>-Djansi.passthrough=true</code></p>
+]]></content>
+      <tags>
+        <tag>IntelliJ IDEA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为 Git 设置代理</title>
+    <url>/2024/08/16/proxy-for-git/</url>
+    <content><![CDATA[<h1 id="Git-使用-HTTP-x2F-HTTPS-传输协议的代理方法"><a href="#Git-使用-HTTP-x2F-HTTPS-传输协议的代理方法" class="headerlink" title="Git 使用 HTTP &#x2F; HTTPS 传输协议的代理方法"></a>Git 使用 HTTP &#x2F; HTTPS 传输协议的代理方法</h1><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">git config <span class="token operator">-</span><span class="token operator">-</span>global http<span class="token operator">.</span>proxy <span class="token operator">&lt;</span>protocol<span class="token operator">></span><span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token operator">&lt;</span>host<span class="token operator">></span><span class="token punctuation">:</span><span class="token operator">&lt;</span>port<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>例如：</p>
+<pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">git config <span class="token operator">-</span><span class="token operator">-</span>global http<span class="token operator">.</span>proxy http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token operator">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9999</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>去除 WinRAR 的弹窗广告</title>
+    <url>/2022/03/13/removing-winrar-ads/</url>
+    <content><![CDATA[<p>首先需要下载 Resource_Hacker 这个软件</p>
+<p>链接：<a href="https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA">https://pan.baidu.com/s/1s40kB42VruDXCyrvmenwUA</a><br>提取码：ls86</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>使用 VisualVM 远程连接 JVM</title>
+    <url>/2022/12/06/remote-connection-to-jvm-using-visualvm/</url>
+    <content><![CDATA[<h1 id="修改-Java-配置"><a href="#修改-Java-配置" class="headerlink" title="修改 Java 配置"></a>修改 Java 配置</h1><span id="more"></span>
+
+<ol>
+<li><p>首先进入 <code>$&#123;JAVA_HOME&#125;/jre/lib/management/</code> (Java8 之后在 <code>/conf/management</code>) 目录。</p>
+</li>
+<li><p>重命名 <em>jmxremote.password.template</em>。</p>
+</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> jmxremote.password.template jmxremote.password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>修改该文件，去掉如下内容的注释。</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">monitorRole  QED
+controlRole  R<span class="token operator">&amp;</span>D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h1 id="添加运行参数"><a href="#添加运行参数" class="headerlink" title="添加运行参数"></a>添加运行参数</h1><p>如果使用 tomcat 就修改 bin&#x2F;catalina.sh (.bat) 文件添加参数。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在 tomcat的 bin 目录下，修改 catalina.sh，添加如下参数</span>
+<span class="token assign-left variable">JAVA_OPTS</span><span class="token operator">=</span><span class="token string">"
+-Dcom.sun.management.jmxremote 
+-Dcom.sun.management.jmxremote.port=9999
+-Dcom.sun.management.jmxremote.authenticate=false
+-Dcom.sun.management.jmxremote.ssl=false"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 jar 包启动就在启动时添加参数：</p>
+<p>启动参数示例：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">java</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.port</span><span class="token operator">=</span><span class="token number">9999</span> 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.local.only</span><span class="token operator">=</span>false 
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.authenticate</span><span class="token operator">=</span>false  
+<span class="token parameter variable">-Dcom.sun.management.jmxremote.ssl</span><span class="token operator">=</span>false 
+<span class="token parameter variable">-Djava.rmi.server.hostname</span><span class="token operator">=</span> your server <span class="token function">host</span> 
+<span class="token parameter variable">-jar</span> xxx.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p> JMX Server 还会随机额外的去监听两个端口，所以在远程连接时我们本地的JMX在连接时也会尝试去连接监听端口。</p>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jps <span class="token parameter variable">-l</span>
+
+<span class="token function">lsof</span> -i<span class="token operator">|</span><span class="token function">grep</span> xxx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-Dcom.sun.management.jmxremote</td>
+<td>允许使用 JMX 远程连接</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.port</td>
+<td>指定 JMX 启动的代理端口，即 visualvm 要连接的端口</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.local.only</td>
+<td>只允许本地连接</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.authenticate</td>
+<td>指定了JMX是否启用鉴权（需要用户名，密码鉴权）</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.ssl</td>
+<td>指定 JMX 是否启用 ssl</td>
+</tr>
+<tr>
+<td>-Djava.rmi.server.hostname</td>
+<td>指定服务器主机名</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.rmi.port</td>
+<td>将这个端口和 jmx.port 的端口设置成一个端口，这样防火墙就只需要放行一个端口</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.access.file</td>
+<td>用户权限文件路径</td>
+</tr>
+<tr>
+<td>-Dcom.sun.management.jmxremote.password.file</td>
+<td>密码文件路径</td>
+</tr>
+</tbody></table>
+<p>通过以上配置便可以在 VisualVM 中使用 JMX 连接。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>ORA-32794 无法删除系统生成的序列</title>
+    <url>/2022/12/17/ora-32794-unable-to-drop-system-generated-sequence/</url>
+    <content><![CDATA[<p>使用：</p>
+<pre class="line-numbers language-none"><code class="language-none">purge recyclebin;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>MySQL 8.x 绿色版安装教程</title>
+    <url>/2023/02/12/mysql8-portable-installation-guide/</url>
+    <content><![CDATA[<p>首先，到 <a href="https://dev.mysql.com/downloads/mysql/">MySQL :: Download MySQL Community Server</a> 下载压缩包。</p>
+<span id="more"></span>
+
+<ol>
+<li><p>将下载好的压缩包解压到合适的位置并解压，解压后的位置例如在 <code>C:\Program Files\mysql-8.0.32-winx64</code>。</p>
+</li>
+<li><p>在 <code>C:\Program Files\mysql-8.0.32-winx64</code> 下创建 <code>my.ini</code> 文件，文件内容如下：</p>
+</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">[mysql]
+
+# 设置 mysql 客户端默认字符集
+default-character-set&#x3D;utf8mb4
+
+[mysqld]
+
+# 设置3306端口
+port&#x3D;3306
+
+# 设置mysql的安装目录
+basedir&#x3D;C:\Program Files\mysql-8.0.32-winx64\
+
+# 设置mysql数据库的数据的存放目录
+datadir&#x3D;C:\Program Files\mysql-8.0.32-winx64\data\
+
+# 允许最大连接数
+max_connections&#x3D;200
+
+# 允许连接失败的次数，这是为了防止有人从该主机试图攻击数据库系统
+max_connect_errors&#x3D;10
+
+# 服务端使用的字符集默认为 UTF8
+character-set-server&#x3D;utf8mb4
+
+# 创建新表时将使用的默认存储引擎
+default-storage-engine&#x3D;INNODB
+
+[client]
+
+# 设置 mysql 客户端连接服务端时默认使用的端口
+port&#x3D;3306
+
+default-character-set&#x3D;utf8mb4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>注意每一行配置后面不要有空格！</p>
+</blockquote>
+<ol start="3">
+<li>以管理员身份运行 cmd 进入 bin 目录，并执行初始化命令：</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">mysqld --initialize --console<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<img src="/2023/02/12/mysql8-portable-installation-guide/mysql-install-1.png" class="" title="MySQL-安装图例-1">
+
+<p>初始化完成后生成的用户名和密码（红框所示位置即为密码），即 root 用户和生成的密码，后续我们可以更改。</p>
+<ol start="4">
+<li>执行 <code>mysqld --install</code> 安装到服务，默认服务名为 <code>MySQL</code>，启动服务命令为：<code>net start MySQL</code>，停止服务：<code>net stop MySQL</code> ，卸载服务：<code>sc delete MySQL</code>。</li>
+</ol>
+<img src="/2023/02/12/mysql8-portable-installation-guide/mysql-install-2.png" class="" title="MySQL-安装图例-2">
+
+<ol start="5">
+<li><p>登录 MySQL 然后修改 root 密码：</p>
+<ol>
+<li>输入命令：<code>mysql -u root -p</code>。</li>
+<li>键入刚才红框中的密码，此时登录成功。</li>
+<li>输入语句 <code>alter user root@&#39;localhost&#39; identified by &#39;123456&#39;;</code>，123456 即为新的密码。</li>
+<li>输入 <code>exit;</code> 退出后，再重新登录试下新密码。</li>
+</ol>
+</li>
+<li><p>将 <code>C:\Program Files\mysql-8.0.32-winx64\bin</code> 添加到环境变量 Path 中。</p>
+</li>
+</ol>
+<p>TODO:</p>
+<pre class="line-numbers language-none"><code class="language-none">set global validate_password.policy&#x3D;LOW;
+set global validate_password.length&#x3D;5;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>此时，MySQL 安装完成。 👏</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>指定 create-react-app 启动时打开的浏览器</title>
+    <url>/2021/04/02/set-the-browser-to-open-when-create-react-app-starts/</url>
+    <content><![CDATA[<p>默认打开自默认浏览器</p>
+<span id="more"></span>
+
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"start"</span><span class="token operator">:</span> <span class="token string">"set BROWSER=firefox&amp;&amp; react-scripts start"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git 重命名远端分支</title>
+    <url>/2023/12/23/rename-git-remote-branch/</url>
+    <content><![CDATA[<p>要修改 Git 远程仓库中的分支名称，可以按以下步骤操作：</p>
+<span id="more"></span>
+
+<ol>
+<li>如果不在要重命名的分支上，那先切换到该分支</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git checkout &lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>重命名本地分支，使用以下命令将本地分支重命名</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git branch -m &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>删除远程仓库中的旧分支（注意冒号）</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin :&lt;old-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="4">
+<li>最后将重命名后的本地分支推送到远端</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">git push origin &lt;new-branch-name&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>只在更新时运行 effect</title>
+    <url>/2021/07/20/running-effects-only-on-updates/</url>
+    <content><![CDATA[<blockquote><p>这是个比较罕见的使用场景。如果你需要的话，你可以 <a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables">使用一个可变的 ref</a> 手动存储一个布尔值来表示是首次渲染还是后续渲染，然后在你的 effect 中检查这个标识。（如果你发现自己经常在这么做，你可以为之创建一个自定义 Hook。</p>
+<footer><strong>@Hooks FAQ</strong><cite><a href="https://zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates">zh-hans.reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates</a></cite></footer></blockquote>
+
+<span id="more"></span>
+
+<br />
+
+<p>💻 编写代码如下：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> useEffect<span class="token punctuation">,</span> useRef<span class="token punctuation">,</span> useState <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react"</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 仅在更新时执行
+ *
+ * @param &#123;React.EffectCallback&#125; effect
+ * @param &#123;React.DependencyList&#125; deps
+ */</span>
+<span class="token keyword">function</span> <span class="token function">useUpdateEffect</span><span class="token punctuation">(</span><span class="token parameter">effect<span class="token punctuation">,</span> deps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> hasMounted <span class="token operator">=</span> <span class="token function">useRef</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>hasMounted<span class="token punctuation">.</span>current<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token function">effect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> deps<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    hasMounted<span class="token punctuation">.</span>current <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>❓ 疑问：</p>
+<p>这样使用的话 <code>eslint-plugin-react-hooks</code> 会产生两个警告：</p>
+<ol>
+<li><p>React Hook useEffect was passed a dependency list that is not an array literal. This means we can’t statically verify whether you’ve passed the correct dependencies. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
+</li>
+<li><p>React Hook useEffect has a missing dependency: ‘effect’. Either include it or remove the dependency array. If ‘effect’ changes too often, find the parent component that defines it and wrap that definition in useCallback. <a href="https://github.com/facebook/react/issues/14920"><em>eslintreact-hooks&#x2F;exhaustive-deps</em></a></p>
+</li>
+</ol>
+<p>会有什么问题呢 😶 ❔</p>
+]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Shiro 自定义 Realm 却只能捕获 AuthenticationException</title>
+    <url>/2022/03/31/shiro-custom-realm-only-catches-authenticationexception/</url>
+    <content><![CDATA[<p>产生这个问题的原因可能有多种，</p>
+<span id="more"></span>
+
+<p>现在笔者只遇到了一种，那就是——项目存在一个以上的 <code>Realm</code>，例如除了自定义 <code>Realm</code> 外， <code>resources</code> 目录下有个 <code>shiro.ini</code> 文件，Shiro 读取到到后自动产生了 <code>IniRealm</code>。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>SQL 备忘录</title>
+    <url>/2023/11/02/sql-memo/</url>
+    <content><![CDATA[<h1 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h1><h2 id="查询版本"><a href="#查询版本" class="headerlink" title="查询版本"></a>查询版本</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span>
+<span class="token keyword">FROM</span> V$VERSION<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<span id="more"></span>
+
+<h2 id="创建用户、赋权"><a href="#创建用户、赋权" class="headerlink" title="创建用户、赋权"></a>创建用户、赋权</h2><!--more-->
+
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 取消 C## 开头的限制</span>
+<span class="token keyword">ALTER</span> <span class="token keyword">SESSION</span> <span class="token keyword">SET</span> <span class="token string">"_ORACLE_SCRIPT"</span><span class="token operator">=</span> <span class="token boolean">TRUE</span><span class="token punctuation">;</span>
+
+<span class="token comment">--           用户名                 密码</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">USER</span> xiaoming IDENTIFIED <span class="token keyword">BY</span> <span class="token number">123456</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 赋予连接权限 </span>
+<span class="token comment">-- CONNECT: 连接数据库、建表…… RESOURCE: 建触发器、过程……</span>
+<span class="token keyword">GRANT</span> <span class="token keyword">CONNECT</span><span class="token punctuation">,</span> RESOURCE <span class="token keyword">TO</span> xiaoming<span class="token punctuation">;</span>
+
+<span class="token comment">-- 授予对表空间 'USERS' 的权限。</span>
+<span class="token keyword">ALTER</span> <span class="token keyword">USER</span> xiaoming QUOTA UNLIMITED <span class="token keyword">ON</span> USERS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="将当前用户的表权限赋予另一个用户"><a href="#将当前用户的表权限赋予另一个用户" class="headerlink" title="将当前用户的表权限赋予另一个用户"></a>将当前用户的表权限赋予另一个用户</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span><span class="token punctuation">,</span> <span class="token keyword">INSERT</span><span class="token punctuation">,</span> <span class="token keyword">UPDATE</span><span class="token punctuation">,</span> <span class="token keyword">DELETE</span> <span class="token keyword">ON</span> <span class="token keyword">Schema</span><span class="token punctuation">.</span>TableNmae <span class="token keyword">TO</span> AnotherSchema<span class="token punctuation">;</span>
+
+<span class="token comment">-- Sequence 等同理</span>
+<span class="token keyword">GRANT</span> <span class="token keyword">SELECT</span> <span class="token keyword">ON</span> <span class="token keyword">Schema</span><span class="token punctuation">.</span>SEQ_XXX <span class="token keyword">TO</span> AnotherSchema<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="批量赋权："><a href="#批量赋权：" class="headerlink" title="批量赋权："></a>批量赋权：</h3><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span>
+  <span class="token keyword">FOR</span> UT <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token keyword">SELECT</span> TABLE_NAME <span class="token keyword">FROM</span> USER_TABLES<span class="token punctuation">)</span>
+    <span class="token keyword">LOOP</span>
+      <span class="token comment">-- DBMS_OUTPUT.PUT_LINE(UT.TABLE_NAME);</span>
+      <span class="token keyword">EXECUTE</span> IMMEDIATE <span class="token string">'GRANT SELECT, INSERT, UPDATE, DELETE ON '</span> <span class="token operator">||</span> UT<span class="token punctuation">.</span>TABLE_NAME <span class="token operator">||</span> <span class="token string">' TO AnotherSchema'</span><span class="token punctuation">;</span>
+    <span class="token keyword">END</span> <span class="token keyword">LOOP</span><span class="token punctuation">;</span>
+<span class="token keyword">END</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="建表"><a href="#建表" class="headerlink" title="建表"></a>建表</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> STUDENT
+<span class="token punctuation">(</span>
+    <span class="token comment">-- 主键，指定名称，自增序列（版本 12c+）</span>
+    ID          NUMBER GENERATED <span class="token keyword">AS</span> <span class="token keyword">IDENTITY</span> <span class="token keyword">CONSTRAINT</span> PK_STD_ID <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span><span class="token punctuation">,</span>
+    STUDENT_ID  VARCHAR2<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment">-- Check，指定名称</span>
+    GENDER      <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">CONSTRAINT</span> CK_GENDER <span class="token keyword">CHECK</span> <span class="token punctuation">(</span> GENDER <span class="token operator">IS</span> <span class="token boolean">NULL</span> <span class="token operator">OR</span> GENDER <span class="token operator">=</span> <span class="token string">'M'</span> <span class="token operator">OR</span> GENDER <span class="token operator">=</span> <span class="token string">'F'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment">-- 外键，指定名称</span>
+    ONE_FK      NUMBER  <span class="token keyword">CONSTRAINT</span> FK_ONE_FK <span class="token keyword">REFERENCES</span> AnotherTable<span class="token punctuation">(</span>ID<span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+    CREATE_TIME <span class="token keyword">DATE</span> <span class="token keyword">DEFAULT</span> SYSDATE
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 唯一索引，指定名称</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">UNIQUE</span> <span class="token keyword">INDEX</span> UK_STUDENT_ID <span class="token keyword">ON</span> STUDENT <span class="token punctuation">(</span>STUDENT_ID<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">-- 表/字段注释</span>
+<span class="token keyword">COMMENT</span> <span class="token keyword">ON</span> <span class="token keyword">TABLE</span> STUDENT <span class="token operator">IS</span> <span class="token string">'学生表'</span><span class="token punctuation">;</span>
+<span class="token keyword">COMMENT</span> <span class="token keyword">ON</span> <span class="token keyword">COLUMN</span> STUDENT<span class="token punctuation">.</span>STUDENT_ID <span class="token operator">IS</span> <span class="token string">'学号'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="RECORD-与-VARRAY-的用法"><a href="#RECORD-与-VARRAY-的用法" class="headerlink" title="RECORD 与 VARRAY 的用法"></a>RECORD 与 VARRAY 的用法</h2><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span>
+    <span class="token keyword">DECLARE</span>
+        <span class="token comment">-- 定义 record 类型</span>
+        <span class="token keyword">TYPE</span> RECORD_TYPE <span class="token operator">IS</span> RECORD
+                          <span class="token punctuation">(</span>
+                              FIELD_1    NUMBER<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                              <span class="token comment">-- 引用某个表的字段类型</span>
+                              FIELD_2    SYS<span class="token punctuation">.</span>XXX<span class="token punctuation">.</span>ID<span class="token operator">%</span><span class="token keyword">TYPE</span><span class="token punctuation">,</span>
+                              FIELD_3    SYS<span class="token punctuation">.</span>XXX<span class="token punctuation">.</span>NAME<span class="token operator">%</span><span class="token keyword">TYPE</span>
+                          <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">-- 定义数组类型</span>
+        <span class="token keyword">TYPE</span> VARRAY_TYPE <span class="token operator">IS</span> VARRAY<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span> <span class="token keyword">OF</span> RECORD_TYPE<span class="token punctuation">;</span>
+
+        <span class="token comment">-- 定义一个变量为 record</span>
+        V_RT        RECORD_TYPE<span class="token punctuation">;</span>
+        <span class="token comment">-- 定义一个变量为数组</span>
+        V_ARR VARRAY_TYPE :<span class="token operator">=</span> VARRAY_TYPE<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">BEGIN</span>
+        <span class="token keyword">FOR</span> REC <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token keyword">SELECT</span> ROWNUM<span class="token punctuation">,</span> A<span class="token punctuation">,</span> B<span class="token punctuation">,</span> C<span class="token punctuation">,</span>
+                    <span class="token keyword">FROM</span> XXX<span class="token punctuation">)</span>
+            <span class="token keyword">LOOP</span>
+                <span class="token comment">-- 向数组内添加元素</span>
+                V_ARR<span class="token punctuation">.</span>EXTEND<span class="token punctuation">;</span> <span class="token comment">-- 在数组末尾添加一个元素</span>
+                V_ARR<span class="token punctuation">(</span>REC<span class="token punctuation">.</span>ROWNUM<span class="token punctuation">)</span><span class="token punctuation">.</span>FIELD_1 :<span class="token operator">=</span> REC<span class="token punctuation">.</span>A<span class="token punctuation">;</span>
+                V_ARR<span class="token punctuation">(</span>REC<span class="token punctuation">.</span>ROWNUM<span class="token punctuation">)</span><span class="token punctuation">.</span>FIELD_2 :<span class="token operator">=</span> REC<span class="token punctuation">.</span>B<span class="token punctuation">;</span>
+                V_ARR<span class="token punctuation">(</span>REC<span class="token punctuation">.</span>ROWNUM<span class="token punctuation">)</span><span class="token punctuation">.</span>FIELD_3 :<span class="token operator">=</span> REC<span class="token punctuation">.</span>C<span class="token punctuation">;</span>
+            <span class="token keyword">END</span> <span class="token keyword">LOOP</span><span class="token punctuation">;</span>
+
+        <span class="token comment">-- 遍历数组</span>
+        <span class="token keyword">FOR</span> V_INDEX <span class="token operator">IN</span> V_ARR<span class="token punctuation">.</span><span class="token keyword">FIRST</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> V_ARR<span class="token punctuation">.</span><span class="token keyword">LAST</span>
+            <span class="token keyword">LOOP</span>
+                V_RT :<span class="token operator">=</span> V_ARR<span class="token punctuation">(</span>V_INDEX<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                DBMS_OUTPUT<span class="token punctuation">.</span>PUT_LINE<span class="token punctuation">(</span>V_RT<span class="token punctuation">.</span>FIELD_1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">END</span> <span class="token keyword">LOOP</span><span class="token punctuation">;</span>
+    <span class="token keyword">END</span><span class="token punctuation">;</span>
+<span class="token keyword">END</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>切换 Windows 11 右键菜单风格</title>
+    <url>/2021/11/07/switch-windows-11-context-menu-style/</url>
+    <content><![CDATA[<p>更新到 Windows 11 之后，整体界面焕然一新，虽然推送的是正式版，实则有些东西完全就是半成品，比如右键菜单的功能就过于简陋，所以必须切换回原来的样子。</p>
+<span id="more"></span>
+
+<ol>
+<li><p>以管理员身份打开 Windows 终端。</p>
+</li>
+<li><p>输入以下 <strong>换回经典</strong> 或 <em>恢复回 Win11</em> 的命令，回车运行。</p>
+<ul>
+<li><p>换回原来的样子</p>
+  <pre class="line-numbers language-none"><code class="language-none">reg add &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;\InprocServer32&quot; &#x2F;f &#x2F;ve<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>回到如今的风格</p>
+  <pre class="line-numbers language-none"><code class="language-none">reg delete &quot;HKCU\Software\Classes\CLSID\&#123;86ca1aa0-34aa-4e8b-a509-50c905bae2a2&#125;&quot; &#x2F;f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p>打开 Windows 资源管理器，然后打开 <a href="https://baike.baidu.com/item/windows%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8/7857349#1_1">任务管理器</a> ，右键选择 Windows 资源管理器，点击 <strong>重新启动</strong>。</p>
+</li>
+<li><p>搞定。</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端使用 Ajax/Fetch 下载文件</title>
+    <url>/2021/11/12/use-ajax-and-fetch/</url>
+    <content><![CDATA[<p>有时需要发送大量参数或其它需要而必须用到 POST 请求时</p>
+<span id="more"></span>
+
+<h1 id="原生-XMLHttpRequest"><a href="#原生-XMLHttpRequest" class="headerlink" title="原生 XMLHttpRequest"></a>原生 <a href="https://xhr.spec.whatwg.org/">XMLHttpRequest</a></h1><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> xhr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XMLHttpRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+xhr<span class="token punctuation">.</span><span class="token function-variable function">onload</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> blob <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Blob</span><span class="token punctuation">(</span><span class="token punctuation">[</span>xhr<span class="token punctuation">.</span>response<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"application/octet-stream"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    
+    <span class="token comment">// 可以从 Content-Disposition 中获取文件名</span>
+    <span class="token comment">// const contentDisposition = xhr.getResponseHeader("Content-Disposition");</span>
+
+    <span class="token keyword">let</span> link <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> fileName <span class="token operator">=</span> <span class="token string">"xxx.xxx"</span><span class="token punctuation">;</span>    
+    link<span class="token punctuation">.</span>href <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">createObjectURL</span><span class="token punctuation">(</span>blob<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    link<span class="token punctuation">.</span>download <span class="token operator">=</span> fileName<span class="token punctuation">;</span>
+    link<span class="token punctuation">.</span><span class="token function">click</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    link<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">revokeObjectURL</span><span class="token punctuation">(</span>link<span class="token punctuation">.</span>href<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// GET | POST |...</span>
+xhr<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span>method<span class="token punctuation">,</span> url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// no param | FormData | json string | ...</span>
+xhr<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="使用-Fetch"><a href="#使用-Fetch" class="headerlink" title="使用 Fetch"></a>使用 <a href="https://attacomsian.com/blog/javascript-fetch-api">Fetch</a></h1><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token string">"POST"</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">resp</span> <span class="token operator">=></span> resp<span class="token punctuation">.</span><span class="token function">blob</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">blob</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">let</span> link <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span>href <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">createObjectURL</span><span class="token punctuation">(</span>blob<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span>download <span class="token operator">=</span> <span class="token string">"xxx.xxx"</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span><span class="token function">click</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">revokeObjectURL</span><span class="token punctuation">(</span>link<span class="token punctuation">.</span>href<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="使用-Axios"><a href="#使用-Axios" class="headerlink" title="使用 Axios"></a>使用 <a href="https://axios-http.com/zh/">Axios</a></h1><blockquote><p>Axios 是一个基于 promise 网络请求库，在客户端 (浏览端) 中使用 XMLHttpRequests</p>
+<footer><strong>@Axios</strong><cite><a href="https://axios-http.com/zh/docs/intro">axios-http.com/zh/docs/intro</a></cite></footer></blockquote>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">url</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">method</span><span class="token operator">:</span> <span class="token string">'post'</span><span class="token punctuation">,</span>
+  <span class="token comment">// 重点</span>
+  <span class="token literal-property property">responseType</span><span class="token operator">:</span> <span class="token string">'blob'</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> blob <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Blob</span><span class="token punctuation">(</span><span class="token punctuation">[</span>data<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'application/octet-stream'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> link <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> fileName <span class="token operator">=</span> <span class="token string">'xxx.xxx'</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span>href <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">createObjectURL</span><span class="token punctuation">(</span>blob<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span>download <span class="token operator">=</span> fileName<span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span><span class="token function">click</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  link<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  window<span class="token punctuation">.</span><span class="token constant">URL</span><span class="token punctuation">.</span><span class="token function">revokeObjectURL</span><span class="token punctuation">(</span>link<span class="token punctuation">.</span>href<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript 中的节流与防抖</title>
+    <url>/2021/12/27/throttling-and-debouncing-in-javascript/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>VS Code 导入 Java 项目却一直 Starting Java Language Server...</title>
+    <url>/2021/08/01/vs-code-import-java-project-stuck-at-starting-java-language-server/</url>
+    <content><![CDATA[<p>关于 Java 环境一直处于加载中 👇</p>
+<span id="more"></span>
+
+<p>进入 %APPDATA%\Code\User 目录，删除 <strong>workspaceStorage</strong> 文件夹</p>
+<blockquote>
+<p><a href="https://github.com/redhat-developer/vscode-java/issues/158">Starting Java Language Server never ends · Issue #158 · redhat-developer&#x2F;vscode-java</a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 craco</title>
+    <url>/2021/04/03/using-craco/</url>
+    <content><![CDATA[<p><code>Craco</code> 的配置示例</p>
+<span id="more"></span>
+
+<blockquote><p>Create React App Configuration Override is an easy and comprehensible configuration layer for create-react-app.</p>
+<p>Get all the benefits of <code>create-react-app</code> and customization without using <code>eject</code> by adding a single <code>craco.config.js</code> file at the root of your application and customize your eslint, babel, postcss configurations and many more.</p>
+<p>All you have to do is create your app using <a href="https://create-react-app.dev/">create-react-app</a> and customize the configuration with a craco.config.js file.</p>
+<footer><strong>gsoft-inc</strong><cite><a href="https://github.com/gsoft-inc/craco#craco">CRACO</a></cite></footer></blockquote>
+
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> <span class="token function">add</span> <span class="token parameter variable">-D</span> @craco/craco<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>创建配置文件：</p>
+<pre class="line-numbers language-none"><code class="language-none">my-app
+├── node_modules
+├── craco.config.js
+└── package.json<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>更新脚本命令</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">/* package.json */
+
+"scripts": &#123;
+<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "start": "react-scripts start",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "start": "craco start",
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "build": "react-scripts build",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "build": "craco build"
+</span></span><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line">   "test": "react-scripts test",
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">   "test": "craco test"
+</span></span>&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h1><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> CracoLessPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"craco-less"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> AntdDayjsWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"antd-dayjs-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> SimpleProgressWebpackPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"simple-progress-webpack-plugin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token literal-property property">plugin</span><span class="token operator">:</span> CracoLessPlugin<span class="token punctuation">,</span>
+      <span class="token literal-property property">options</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">lessLoaderOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">lessOptions</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">javascriptEnabled</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">webpack</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">plugins</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token keyword">new</span> <span class="token class-name">AntdDayjsWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">SimpleProgressWebpackPlugin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"antd-dayjs-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.0.6"</span><span class="token punctuation">,</span>
+  <span class="token property">"craco-less"</span><span class="token operator">:</span> <span class="token string">"^1.17.1"</span><span class="token punctuation">,</span>
+  <span class="token property">"simple-progress-webpack-plugin"</span><span class="token operator">:</span> <span class="token string">"^1.1.2"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VS Code 终端进程启动失败</title>
+    <url>/2021/09/11/vs-code-terminal-process-start-failed/</url>
+    <content><![CDATA[<p>关于 VS Code 打开终端报错——终端进程启动失败： A native exception occurred during launch (Unable to start terminal process: CreateProcess failed) 的解决方案。</p>
+<span id="more"></span>
+
+<p>在配置项 <code>terminal.integrated.shell.windows</code> 提示已被弃用且配置了也好像无济于事的情况下，我们应该就要按其提示的使用新的配置方式。</p>
+<p>– 图</p>
+<p>当输入 <code>terminal.integrated.profiles.windows</code>，VS Code 会给出提示并在确定后自动给出默认配置，类似如下的样子：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.profiles.windows"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"PowerShell"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"PowerShell"</span><span class="token punctuation">,</span>
+    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-powershell"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"Command Prompt"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"path"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"$&#123;env:windir&#125;\\Sysnative\\cmd.exe"</span><span class="token punctuation">,</span>
+      <span class="token string">"$&#123;env:windir&#125;\\System32\\cmd.exe"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"terminal-cmd"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"Git Bash"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"source"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但是仅仅这样还是不够的，上面只相当于列出一个可用终端类型的列表，你还需要一个配置去指定默认要使用的终端类型，如下：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"terminal.integrated.defaultProfile.windows"</span><span class="token operator">:</span> <span class="token string">"Git Bash"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p> 如此配好之后，便可以正常打开终端了。</p>
+<p>另一个问题❓</p>
+<p>现在打开终端是没问题了，但是我们通过 VS Code 去运行 npm 脚本时，却还提示</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token operator">></span> Executing task: <span class="token function">yarn</span> run start <span class="token operator">&lt;</span>
+
+终端进程启动失败: A native exception occurred during launch <span class="token punctuation">(</span>Unable to start terminal process: CreateProcess failed<span class="token punctuation">)</span>。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>好吧，还需要一个配置（怎么这么多配置？），就是：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token comment">// 一个路径，设置后将替代 terminal.integrated.shell.windows，并忽略与自动化相关的终端使用情况(例如任务和调试)的 shellArgs 值。</span>
+<span class="token property">"terminal.integrated.automationShell.windows"</span><span class="token operator">:</span> <span class="token string">"C:\\WINDOWS\\System32\\cmd.exe"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>在这个配置中，我试图使用 Git Bash 的路径，但并不能用。</p>
+]]></content>
+      <tags>
+        <tag>Visual Studio Code</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 RestTemplate 发送 JSON 或者 x-www-form-urlencoded</title>
+    <url>/2021/04/11/using-resttemplate-to-send-json-or-x-www-form-urlencoded/</url>
+    <content><![CDATA[<p>二者的区别：</p>
+<ol>
+<li><p><a href="https://baike.baidu.com/item/JSON">JSON</a></p>
+<p><code>Content-Type</code> 被设置为 <code>application/json</code>，数据以 <code>JSON</code> 格式放在<strong>请求体</strong>中。</p>
+</li>
+</ol>
+<span id="more"></span>
+
+<ol start="2">
+<li><p>application&#x2F;x-www-form-urlencoded</p>
+<p>浏览器原生表单默认的编码方式，数据被编码成以 <code>&amp;</code> 分隔的键-值对, 同时以 <code>=</code> 分隔键和值。 非字母或数字的字符会被 <a href="https://developer.mozilla.org/zh-CN/docs/Glossary/percent-encoding">percent-encoding</a>：这也就是为什么这种类型不支持二进制数据（应使用 <code>multipart/form-data</code> 代替）。</p>
+</li>
+</ol>
+<p>因为数据格式不同，所以后台获取的方式也不同。</p>
+<hr>
+<p>首先构造一个 <code>RestTemplate</code> 实例：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">RestTemplate</span> restTemplate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestTemplate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h1><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"xxx"</span><span class="token punctuation">;</span>
+
+<span class="token class-name">HttpHeaders</span> headers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpHeaders</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+headers<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token class-name">MediaType</span><span class="token punctuation">.</span><span class="token constant">APPLICATION_JSON</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">></span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"xxx"</span><span class="token punctuation">,</span> <span class="token string">"xxx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span>put<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token class-name">HttpEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">></span><span class="token punctuation">></span></span> request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> headers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 泛型为接口返回数据的类型</span>
+<span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">></span></span> response <span class="token operator">=</span> restTemplate<span class="token punctuation">.</span><span class="token function">postForEntity</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> request<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 获取响应主体</span>
+response<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span>；<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h1 id="x-www-form-urlencoded"><a href="#x-www-form-urlencoded" class="headerlink" title="x-www-form-urlencoded"></a>x-www-form-urlencoded</h1><p>使用 <a href="https://www.javadoc.io/doc/org.springframework/spring-core/latest/org/springframework/util/LinkedMultiValueMap.html"><code>LinkedMultiValueMap</code></a> 构造数据。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token string">"xxx"</span><span class="token punctuation">;</span>
+
+<span class="token class-name">HttpHeaders</span> headers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpHeaders</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+headers<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token class-name">MediaType</span><span class="token punctuation">.</span><span class="token constant">APPLICATION_FORM_URLENCODED</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name">LinkedMultiValueMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">></span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LinkedMultiValueMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"Martin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"gender"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span>add<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token class-name">HttpEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">LinkedMultiValueMap</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">></span><span class="token punctuation">></span></span> request <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span>params<span class="token punctuation">,</span>
+        headers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 泛型为接口返回数据的类型</span>
+<span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">></span></span> response <span class="token operator">=</span> restTemplate<span class="token punctuation">.</span><span class="token function">postForEntity</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> request<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 获取响应主体</span>
+response<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span>；<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么不能修改 Twitter 的显示名称</title>
+    <url>/2024/04/06/why-can-t-you-modify-the-display-name-on-twitter/</url>
+    <content><![CDATA[<blockquote><p><strong>Note:</strong> When you are initially going through your profile set-up, you will not see the option to change your display name, until you have a profile and header photo uploaded. </p>
+<footer><strong>@Twitter</strong><cite><a href="https://help.twitter.com/en/managing-your-account/how-to-customize-your-profile">help.twitter.com/en/managing-your-account/how-to-customize-your-profile</a></cite></footer></blockquote>]]></content>
+  </entry>
+  <entry>
+    <title>Java JSON library - Jackson 的使用</title>
+    <url>/2021/03/16/using-jackson-java-json-library/</url>
+    <content><![CDATA[<p>从实际使用的角度列出对 <code>Jackson</code> 的一些操作。</p>
+<span id="more"></span>
+
+<p>What is Jackson?</p>
+<blockquote><p>Jackson has been known as “the Java JSON library” or “the best JSON parser for Java”. Or simply as “JSON for Java”.</p>
+<footer><strong>@FasterXML</strong><cite><a href="https://github.com/FasterXML/jackson#what-is-jackson">GitHub - FasterXML/jackson</a></cite></footer></blockquote>
+
+<h1 id="只在序列化或反序列化时忽略"><a href="#只在序列化或反序列化时忽略" class="headerlink" title="只在序列化或反序列化时忽略"></a>只在序列化或反序列化时忽略</h1><p>使用注解 <code>@JsonProperty</code> 的 <code>access</code> 属性。</p>
+<h1 id="定义反序列化时的别名"><a href="#定义反序列化时的别名" class="headerlink" title="定义反序列化时的别名"></a>定义反序列化时的别名</h1><p>使用注解 <code>@JsonAlias</code>。</p>
+<p>注：可定义属性的一个或<strong>多个</strong>替代名称，在反序列化期间可以接受为<strong>正式名称的替代</strong>。 别名信息在 <code>POJO</code> 内省期间也会公开，但在始终使用主名的序列化过程中无效。</p>
+<p>代码示例：</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Info</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@JsonAlias</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token string">"n"</span><span class="token punctuation">,</span> <span class="token string">"Name"</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+]]></content>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 Hexo 写作</title>
+    <url>/2021/02/21/writing-with-hexo/</url>
+    <content><![CDATA[<p>标签插件和 Front-matter 中的标签不同，它们是用于在文章中快速插入特定内容的插件。</p>
+<p>虽然你可以使用任何格式书写你的文章，但是标签插件永远可用，且语法也都是一致的。</p>
+<span id="more"></span>
+
+<h1 id="Hexo-标签"><a href="#Hexo-标签" class="headerlink" title="Hexo 标签"></a>Hexo 标签</h1><blockquote><p>因为使用 Markdown ，所以只列举一些特别的标签。</p>
+<footer><strong>Hexo</strong><cite><a href="https://hexo.io/zh-cn/docs/tag-plugins">hexo.io/zh-cn/docs/tag-plugins</a></cite></footer></blockquote>
+
+<h2 id="引用块"><a href="#引用块" class="headerlink" title="引用块"></a>引用块</h2><p>在文章中插入引言，可包含作者、来源和标题</p>
+<p>别号： quote</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% blockquote [author[, source]] [link] [source_link_title] %&#125;
+content
+&#123;% endblockquote %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="iframe"><a href="#iframe" class="headerlink" title="iframe"></a>iframe</h2><p>在文章中插入 iframe。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% iframe url [width] [height] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="文章摘要和截断"><a href="#文章摘要和截断" class="headerlink" title="文章摘要和截断"></a>文章摘要和截断</h2><p>在文章中使用 <code>&lt;!-- more --&gt;</code>，那么 <code>&lt;!-- more --&gt;</code> 之前的文字将会被视为摘要。首页中将只出现这部分文字，同时这部分文字也会出现在正文之中。</p>
+<h2 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h2><p>在文章中插入代码。</p>
+<p>别名： code</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock [title] [lang:language] [url] [link text] [additional options] %&#125;
+code snippet
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<ol>
+<li>普通的代码块</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock %&#125;
+alert(&#39;Hello World!&#39;);
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">alert(&#39;Hello World!&#39;);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>指定语言</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:objc %&#125;
+[rectangle setX: 10 y: 10 width: 20 height: 20];
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-objectivec" data-language="objectivec"><code class="language-objectivec"><span class="token punctuation">[</span>rectangle setX<span class="token punctuation">:</span> <span class="token number">10</span> y<span class="token punctuation">:</span> <span class="token number">10</span> width<span class="token punctuation">:</span> <span class="token number">20</span> height<span class="token punctuation">:</span> <span class="token number">20</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="3">
+<li>附加说明和网址</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% codeblock lang:js Array.map https:&#x2F;&#x2F;developer.mozilla.org&#x2F;zh-CN&#x2F;docs&#x2F;Web&#x2F;JavaScript&#x2F;Reference&#x2F;Global_Objects&#x2F;Array&#x2F;map Array.prototype.map() - JavaScript | MDN %&#125;
+const array1 &#x3D; [1, 4, 9, 16];
+
+&#x2F;&#x2F; pass a function to map
+const map1 &#x3D; array1.map(x &#x3D;&gt; x * 2);
+
+console.log(map1);
+&#x2F;&#x2F; expected output: Array [2, 8, 18, 32]
+&#123;% endcodeblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-javascript" data-language="javascript"><div class="caption"><span>Array.map</span><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/map">Array.prototype.map() - JavaScript | MDN</a></div><code class="language-javascript"><span class="token keyword">const</span> array1 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token comment">// pass a function to map</span>
+<span class="token keyword">const</span> map1 <span class="token operator">=</span> array1<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">x</span> <span class="token operator">=></span> x \<span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>map1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// expected output: Array [2, 8, 18, 32]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="反引号代码块"><a href="#反引号代码块" class="headerlink" title="反引号代码块"></a>反引号代码块</h2><p>另一种形式的代码块，不同的是它使用三个反引号来包裹。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#96;&#96;&#96; [language] [title] [url] [link text] code snippet &#96;&#96;&#96;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h2><p>在文章中插入链接，并自动给外部链接添加 <code>target=&quot;_blank&quot;</code> 属性。</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% link text url [external] [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h1 id="资源的引用"><a href="#资源的引用" class="headerlink" title="资源的引用"></a>资源的引用</h1><blockquote>
+<p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的 Hexo 项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
+</blockquote>
+<p>将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开，这样 Hexo 将会在你每一次通过<code> hexo new [layout] &lt;title&gt;</code> 命令创建新文章时自动创建一个与文章同名的文件夹，当然也可以手动创建。</p>
+<pre class="line-numbers language-yaml" data-language="yaml"><div class="caption"><span>_config.yml</span></div><code class="language-yaml"><span class="token key atrule">post_asset_folder</span><span class="token punctuation">:</span> <span class="token boolean important">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>通过常规的 <code>markdown</code> 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。使用以下 <code>Hexo</code> 标签来加载资源：</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% asset_path slug %&#125;
+&#123;% asset_img slug [title] %&#125;
+&#123;% asset_link slug [title] %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>例如：<code>&#123;% asset_img Pikachu.jpg Pikachu %&#125;</code></p>
+<img src="/2021/02/21/writing-with-hexo/Pikachu.jpg" class="" title="Pikachu">
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+</search>
